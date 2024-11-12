@@ -21,4 +21,11 @@ export type Ferry = {
   price: number;
 };
 
+export interface PassengerCounts {
+  infant: number;
+  child: number;
+  adult: number;
+  senior: number;
+}
+
 export type BookingStep = 'route' | 'booker' | 'passengers' | 'seats' | 'payment';

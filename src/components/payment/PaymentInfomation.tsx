@@ -76,7 +76,7 @@ function PaymentInfomation({ onSubmit, onBack }: Props) {
   };
 
   const invoiceInfo = {
-    buyer: 'Hà Nguyệt Nhi',
+    buyer: 'Cao Hữu Quý',
     company: 'CÔNG TY CỔ PHẦN TÀU CAO TỐC SUPERDONG-KIÊN GIANG',
     taxId: '1700556108',
     address: '187 Nguyễn Trung Trực, Khu phố 5, Phường Dương Đông, Thành phố Phú Quốc, Kiên Giang',
@@ -122,7 +122,6 @@ function PaymentInfomation({ onSubmit, onBack }: Props) {
   
   return (
     <div className="min-h-screen bg-gray-50">
-
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
         <BookingInfo customerInfo={customerInfo} invoiceInfo={invoiceInfo} />
         <PassengerList passengers={passengers} />

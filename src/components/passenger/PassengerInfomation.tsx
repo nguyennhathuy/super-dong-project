@@ -56,13 +56,13 @@ const MOCK_TRIP_INFO: TripInfo = {
 type Props = {
     onSubmit: () => void;
     onBack: () => void;
+    countPassenger: number
   };
 
-const PassengerInfomation = ({ onSubmit, onBack }: Props) => {
-  const [passengers, setPassengers] = React.useState<Passenger[]>([
-    { ...INITIAL_PASSENGER },
-    { ...INITIAL_PASSENGER },
-  ]);
+const PassengerInfomation = ({ onSubmit, onBack, countPassenger }: Props) => {
+  const [passengers, setPassengers] = React.useState<Passenger[]>(
+    () => Array.from({ length: countPassenger }, () => ({ ...INITIAL_PASSENGER }))
+  );
   const [errors, setErrors] = React.useState<Record<string, string>>({});
 
   const handlePassengerChange = (index: number, field: keyof Passenger, value: any) => {

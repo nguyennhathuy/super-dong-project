@@ -1,38 +1,38 @@
 import { useState } from 'react';
-import BookerInformation from './components/BookerInformation';
-import SearchTrip from './components/booking/SearchTrip';
+import BookerInformation from './components/booker/BookerInformation';
 import ProgressBar from './components/ProgressBar';
 import PassengerInfomation from './components/passenger/PassengerInfomation';
 import SeatInfomation from './components/seat/SeatInfomation';
 import PaymentInfomation from './components/payment/PaymentInfomation';
 import AuthForm from './components/auth/AuthForm';
-
-
-// const steps: { id: Step; label: string }[] = [
-//   { id: 'route', label: 'Tuyến' },
-//   { id: 'booker', label: 'Người đặt vé' },
-//   { id: 'passengers', label: 'Hành khách' },
-//   { id: 'seats', label: 'Chọn ghế ngồi' },
-//   { id: 'payment', label: 'Thanh toán' },
-// ];
+import { Ship } from 'lucide-react';
+import RouteInfomation from './components/route/RouteInfomation';
+import { PassengerCounts } from './types';
+import { calculatePassengers } from './utils';
+import StaffRouteInfomation from './components/staffRoute/staffRouteInfomation';
+import Navigation from './components/staffRoute/Navigation';
 
 
 function App() {
-  const [currentStep, setCurrentStep] = useState<string>('route')
-  const [isLogin, setIsLogin] = useState<boolean>(false);
-
-
-  const handleSubmitSearchTrip = (data: any) => {
+  const [currentStep, setCurrentStep] = useState<string>('route');
+  const [isLogin, setIsLogin] = useState<string | null>(null);
+  const [totalPassenger, setTotalPassenger] = useState<PassengerCounts>({
+      infant: 0,
+      child: 0,
+      adult: 1,
+      senior: 0
+  });
+  const [activeTab, setActiveTab] = useState('dat-ve');
+  const handleSubmitSearchTrip = () => {
     setCurrentStep('booker');
   }
 
   const handleSubmitBooker = (data: any) => {
-    console.log('Form submitted:', data);
+    console.log(data);
     setCurrentStep('passengers');
   };
 
   const handleBackBooker = () => {
-    console.log('handleBackBooker')
     setCurrentStep('route');
   }
 
@@ -41,73 +41,94 @@ function App() {
   }
 
   const handleBackPassenser = () => {
-    console.log('handleBackPassenser')
     setCurrentStep('booker');
   }
 
   const handleSubmitSeat = () => {
-    console.log('handleSubmitSeat')
     setCurrentStep('payment');
   }
 
   const handleBackSeat = () => {
-    console.log('handleBackPassenser')
     setCurrentStep('passengers');
   }
 
   const handleSubmitPayment = () => {
-    console.log('handleSubmitPayment')
-    //setCurrentStep('payment');
+    setCurrentStep('payment');
   }
 
   const handleBackPayment = () => {
-    console.log('handleBackPassenser')
     setCurrentStep('seats');
   }
 
   const renderSwitch = (param: string) => {
-    switch(param) {
+    switch (param) {
       case 'route':
-        return <SearchTrip 
-                  onSubmit={handleSubmitSearchTrip}
-                />;
+        return <RouteInfomation
+          onSubmit={handleSubmitSearchTrip}
+          totalPassenger={totalPassenger}
+          setTotalPassenger={setTotalPassenger}
+        />;
       case 'booker':
-        return <BookerInformation 
-                  onSubmit={handleSubmitBooker} 
-                  onBack={handleBackBooker}
-                />;
+        return <BookerInformation
+          onSubmit={handleSubmitBooker}
+          onBack={handleBackBooker}
+        />;
       case 'passengers':
         return <PassengerInfomation
-                  onSubmit={handleSubmitPassenser} 
-                  onBack={handleBackPassenser}
-                />;
+          onSubmit={handleSubmitPassenser}
+          onBack={handleBackPassenser}
+          countPassenger={calculatePassengers(totalPassenger)} 
+        />;
       case 'seats':
         return <SeatInfomation
-                  onSubmit={handleSubmitSeat} 
-                  onBack={handleBackSeat}
-                />
+          onSubmit={handleSubmitSeat}
+          onBack={handleBackSeat}
+        />
       case 'payment':
         return <PaymentInfomation
-                  onSubmit={handleSubmitPayment} 
-                  onBack={handleBackPayment}
-                />
+          onSubmit={handleSubmitPayment}
+          onBack={handleBackPayment}
+        />
       default:
-        return <>Error</>;
+        return <>404</>;
     }
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {
+        (isLogin && isLogin === 'khachHang') && (
+          <header className="bg-blue-700 text-white py-4">
+            <div className="container mx-auto px-4">
+              <div className="flex items-center space-x-2">
+                <Ship className="h-8 w-8" />
+                <h1 className="text-2xl font-bold">Đặt Vé Tàu</h1>
+              </div>
+            </div>
+          </header>
+        )
+      }
+      {
+        (isLogin && isLogin === 'nhanVien') && (
+          <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+        )
+      }
+        
+      
       <div className="max-w-7xl mx-auto px-4 py-8">
         {
           !isLogin ?
-          <AuthForm 
-            onSubmit={setIsLogin}
-          /> : 
-          <>
-            <ProgressBar currentStep={currentStep} />
-            {renderSwitch(currentStep)}
-          </>
+            <AuthForm
+              onSubmit={setIsLogin}
+            /> :
+          isLogin === 'khachHang' ?
+            <>
+              <ProgressBar 
+                currentStep={currentStep} 
+              />
+              {renderSwitch(currentStep)}
+            </> :
+          <StaffRouteInfomation />
         }
       </div>
     </div>

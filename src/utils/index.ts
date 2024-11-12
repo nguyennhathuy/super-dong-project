@@ -1,3 +1,5 @@
+import { PassengerCounts } from "../types";
+
 export function calculateAge(birthDate: string, referenceDate: string): number {
     const birth = new Date(birthDate);
     const reference = new Date(referenceDate);
@@ -25,4 +27,8 @@ export function calculateAge(birthDate: string, referenceDate: string): number {
   
   export function validatePhone(phone: string): boolean {
     return /^(0[0-9]{9})$/.test(phone);
+  }
+
+  export function calculatePassengers(passengerCount: PassengerCounts): number {
+    return Object.values(passengerCount).reduce((a, b) => a + b, 0);
   }

@@ -4,7 +4,7 @@ import { Eye, EyeOff, Facebook, Github, Mail } from 'lucide-react';
 type AuthMode = 'login' | 'register' | 'forgot';
 
 type Props = {
-  onSubmit: (data: boolean) => void;
+  onSubmit: (data: string) => void;
 }
 
 export default function AuthForm({ onSubmit }: Props) {
@@ -53,9 +53,14 @@ export default function AuthForm({ onSubmit }: Props) {
       console.log('Form submitted:', formData);
     }
     if(
-      formData.email === "test@gmail.com" && formData.password === "hello1"
+      formData.email === "khachhang@gmail.com" && formData.password === "hello1"
     ){
-      onSubmit(true);
+      onSubmit('khachHang');
+    }
+    if(
+      formData.email === "nhanvien@gmail.com" && formData.password === "hello1"
+    ){
+      onSubmit('nhanVien');
     }
   };
 
