@@ -9,7 +9,7 @@ import { Ship } from 'lucide-react';
 import RouteInfomation from './components/route/RouteInfomation';
 import { PassengerCounts } from './types';
 import { calculatePassengers } from './utils';
-import StaffRouteInfomation from './components/staffRoute/staffRouteInfomation';
+import StaffRouteInfomation from './components/staffRoute/StaffRouteInfomation';
 import Navigation from './components/staffRoute/Navigation';
 
 
