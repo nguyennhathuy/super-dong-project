@@ -6,6 +6,7 @@ import { ServiceList } from './ServiceList';
 import { PromoCode } from './PromoCode'; 
 import { TotalAmount } from './TotalAmount'; 
 import { PaymentMethods, PaymentType } from './PaymentMethods'; 
+import { Timer } from './Timer';
 
 interface Service {
   name: string;
@@ -38,6 +39,11 @@ function PaymentInfomation({ onSubmit, onBack }: Props) {
     { name: 'Thuê xe máy (xe tay ga)', unit: 'ngày', price: 160000, quantity: 0 },
     { name: 'Xe trung chuyển', unit: 'người', price: 20000, quantity: 0 },
   ]);
+  const [showTimeoutModal, setShowTimeoutModal] = useState(false);
+  
+  const handleTimeout = () => {
+    setShowTimeoutModal(true);
+  };
 
   const passengers: Passenger[] = [
     {
@@ -89,7 +95,7 @@ function PaymentInfomation({ onSubmit, onBack }: Props) {
   };
 
   const handlePromoCode = () => {
-    if (promoCode.toLowerCase() === 'summer2024') {
+    if (promoCode.toLowerCase() === 'superdong50') {
       setPromoApplied(true);
       alert('Mã giảm giá đã được áp dụng thành công!');
     } else {
@@ -118,7 +124,7 @@ function PaymentInfomation({ onSubmit, onBack }: Props) {
 
   const totalTicketPrice = passengers.reduce((sum, p) => sum + p.price, 0);
   const totalServicePrice = services.reduce((sum, s) => sum + s.price * s.quantity, 0);
-  const discount = promoApplied ? Math.floor((totalTicketPrice + totalServicePrice) * 0.1) : 0;
+  const discount = promoApplied ? 50000 : 0;
   
   return (
     <div className="min-h-screen bg-gray-50">
@@ -167,6 +173,29 @@ function PaymentInfomation({ onSubmit, onBack }: Props) {
               Thanh toán
             </button>
           </div>
+
+
+        <Timer initialMinutes={10} onTimeout={handleTimeout} />
+
+        {showTimeoutModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded-lg shadow-xl max-w-md">
+              <h3 className="text-lg font-semibold mb-4">
+                Thời gian giữ chỗ đã hết
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Vui lòng đặt vé lại.
+              </p>
+              <button
+                onClick={() => window.location.reload()}
+                className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Đặt vé lại
+              </button>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

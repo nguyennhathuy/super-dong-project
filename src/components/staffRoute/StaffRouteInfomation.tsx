@@ -2,9 +2,12 @@ import { useState } from 'react';
 import BookingForm from './BookingForm';
 import RouteList from './RouteList';
 import CustomerInfo from './CustomerInfo';
-import Navigation from './Navigation';
 
-function StaffRouteInfomation() {
+interface Props {
+  onSubmit: () => void
+}
+
+function StaffRouteInfomation({ onSubmit }: Props) {
   const [activeTab, setActiveTab] = useState('dat-ve');
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [passengers, setPassengers] = useState(1);
@@ -34,6 +37,7 @@ function StaffRouteInfomation() {
 
           <CustomerInfo 
             selectedRoute={selectedRoute}
+            onSubmit={onSubmit}
           />
         </main>
       )}

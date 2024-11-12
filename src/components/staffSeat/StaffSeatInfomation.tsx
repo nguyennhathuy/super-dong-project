@@ -1,43 +1,16 @@
 import { useState } from 'react';
-import SeatMap from './SeatMap'; 
-import PassengerList from './PassengerList'; 
-import JourneyTabs from './JourneyTabs'; 
-import { AlertTriangle, ArrowLeft, ArrowRight } from 'lucide-react';
-
-// type PassengerType = 'TRE_EM' | 'NGUOI_LON' | 'NGUOI_CAO_TUOI' | 'TRE_SO_SINH' | 'NGUOI_KHUYET_TAT';
-
-// interface Passenger {
-//   id: number;
-//   name: string;
-//   type: PassengerType;
-//   seatGo?: string;
-//   seatReturn?: string;
-// }
-
-type PassengerType = 
-  | ''
-  | 'Trẻ sơ sinh'
-  | 'Trẻ em'
-  | 'Người lớn'
-  | 'Người cao tuổi'
-  | 'Người khuyết tật';
+import SeatMap from './SeatMap';
+import PassengerList from './PassengerList';
+import JourneyTabs from './JourneyTabs';
+import { AlertTriangle } from 'lucide-react';
+type PassengerType = 'TRE_EM' | 'NGUOI_LON' | 'NGUOI_CAO_TUOI' | 'TRE_SO_SINH' | 'NGUOI_KHUYET_TAT';
 
 interface Passenger {
-  nationality: string;
-  idNumber: string;
-  fullName: string;
-  birthPlace: string;
-  birthDate: string;
-  phone: string;
-  email: string;
-  specialNeeds: boolean;
-  passengerType: PassengerType;
+  id: number;
+  name: string;
+  type: PassengerType;
   seatGo?: string;
   seatReturn?: string;
-  ship?: string;
-  date?: string;
-  time?: string;
-  price?: number;
 }
 
 interface Journey {
@@ -53,11 +26,11 @@ interface Seat {
   price: number;
 }
 
-// const MOCK_PASSENGERS: Passenger[] = [
-//   { id: 1, name: 'Nguyễn Văn A', type: 'TRE_EM' },
-//   { id: 2, name: 'Lê B', type: 'NGUOI_CAO_TUOI' },
-//   { id: 3, name: 'Trần C', type: 'TRE_SO_SINH' },
-// ];
+const MOCK_PASSENGERS: Passenger[] = [
+  { id: 1, name: 'Nguyễn Văn A', type: 'TRE_EM' },
+  { id: 2, name: 'Lê B', type: 'NGUOI_CAO_TUOI' },
+  { id: 3, name: 'Trần C', type: 'TRE_SO_SINH' },
+];
 
 const MOCK_JOURNEY_GO: Journey = {
   shipCode: 'SuperDong III',
@@ -85,24 +58,21 @@ const generateMockSeats = (): Seat[] => {
   return seats;
 };
 
-type Props = {
+interface Props {
   onSubmit: () => void;
   onBack: () => void;
-  tripType: 'oneWay' | 'roundTrip';
-  passengers: Passenger[]
-  setPassengers: (data: Passenger[]) => void
-};
+}
 
-function SeatInfomation({ onSubmit, onBack, tripType, passengers, setPassengers }: Props) {
+function StaffSeatInfomation({ onSubmit, onBack }: Props) {
   const [activeTab, setActiveTab] = useState<'go' | 'return'>('go');
-  // const [passengers, setPassengers] = useState<Passenger[]>(MOCK_PASSENGERS);
+  const [passengers, setPassengers] = useState<Passenger[]>(MOCK_PASSENGERS);
   const [seatsGo] = useState<Seat[]>(generateMockSeats());
   const [seatsReturn] = useState<Seat[]>(generateMockSeats());
 
   const handleSeatSelect = (seatId: string) => {
     const updatedPassengers = [...passengers];
     const passengerToUpdate = updatedPassengers.find(
-      (p) => p.passengerType !== 'Trẻ sơ sinh' && 
+      (p) => p.type !== 'TRE_SO_SINH' && 
       (activeTab === 'go' ? !p.seatGo : !p.seatReturn)
     );
 
@@ -129,7 +99,7 @@ function SeatInfomation({ onSubmit, onBack, tripType, passengers, setPassengers 
 
   const getMissingSeatsWarning = () => {
     const passengersNeedingSeats = passengers.filter(
-      (p) => p.passengerType !== 'Trẻ sơ sinh'
+      (p) => p.type !== 'TRE_SO_SINH'
     );
     const seatsSelected = getSelectedSeats().length;
     return passengersNeedingSeats.length > seatsSelected;
@@ -168,13 +138,11 @@ function SeatInfomation({ onSubmit, onBack, tripType, passengers, setPassengers 
                 onTabChange={setActiveTab}
                 journeyGo={MOCK_JOURNEY_GO}
                 journeyReturn={MOCK_JOURNEY_RETURN}
-                tripType={tripType}
               />
 
               <PassengerList
                 passengers={passengers}
                 onSeatChange={() => {}}
-                tripType={tripType}
               />
 
               {getMissingSeatsWarning() && (
@@ -201,23 +169,19 @@ function SeatInfomation({ onSubmit, onBack, tripType, passengers, setPassengers 
           </div>
         </div>
 
-        <div className="flex justify-between mt-8 space-x-4">
-        <button
-            type="button"
-            className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-            onClick={onBack}
+        <div className="mt-8 flex justify-end space-x-4">
+          <button 
+            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              onClick={onBack}
           >
-            <ArrowLeft className="w-5 h-5 mr-2" />
             Quay lại
           </button>
-          
           <button
-            type="submit"
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-            onClick={onSubmit}
+            disabled={getMissingSeatsWarning()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              onClick={onSubmit}
           >
             Tiếp tục
-            <ArrowRight className="w-5 h-5 ml-2" />
           </button>
         </div>
       </div>
@@ -225,4 +189,4 @@ function SeatInfomation({ onSubmit, onBack, tripType, passengers, setPassengers 
   );
 }
 
-export default SeatInfomation;
+export default StaffSeatInfomation;

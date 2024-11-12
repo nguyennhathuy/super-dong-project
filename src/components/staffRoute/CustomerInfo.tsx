@@ -3,9 +3,10 @@ import { User, Building2, Phone, Mail, CreditCard, MapPin } from 'lucide-react';
 
 interface CustomerInfoProps {
   selectedRoute: any;
+  onSubmit: () => void;
 }
 
-const CustomerInfo: React.FC<CustomerInfoProps> = ({ selectedRoute }) => {
+const CustomerInfo: React.FC<CustomerInfoProps> = ({ selectedRoute, onSubmit }) => {
   const [isMainPassenger, setIsMainPassenger] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -47,6 +48,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ selectedRoute }) => {
     if (validateForm()) {
       // Handle form submission
       console.log('Form submitted:', formData);
+      onSubmit();
     }
   };
 

@@ -12,18 +12,43 @@ import { calculatePassengers } from '../../utils';
 type Props = {
     onSubmit: () => void;
     totalPassenger: PassengerCounts;
-    setTotalPassenger: (data: PassengerCounts) => void
+    setTotalPassenger: (data: PassengerCounts) => void;
+    tripType: 'oneWay' | 'roundTrip';
+    setTripType: (data: 'oneWay' | 'roundTrip') => void;
+    departureDate: Date | null
+    returnDate: Date | null
+    departurePoint: string
+    destinationPoint: string
+    setDepartureDate: (data: Date | null) => void;
+    setReturnDate: (data: Date | null) => void;
+    setDeparturePoint: (data: string) => void;
+    setDestinationPoint: (data: string) => void;
 }
 
 
-function RouteInfomation({ onSubmit, totalPassenger, setTotalPassenger }: Props) {
-    const [tripType, setTripType] = useState<'oneWay' | 'roundTrip'>('oneWay');
-    const [departureDate, setDepartureDate] = useState<Date | null>(null);
-    const [returnDate, setReturnDate] = useState<Date | null>(null);
+function RouteInfomation(
+    { 
+        onSubmit, 
+        totalPassenger, 
+        setTotalPassenger, 
+        tripType, 
+        setTripType,
+        departureDate,
+        returnDate,
+        departurePoint,
+        destinationPoint,
+        setDepartureDate,
+        setReturnDate,
+        setDeparturePoint,
+        setDestinationPoint
+    }
+    : Props) {
+    // const [departureDate, setDepartureDate] = useState<Date | null>(null);
+    // const [returnDate, setReturnDate] = useState<Date | null>(null);
     const [showResults, setShowResults] = useState<boolean>(false);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-    const [departurePoint, setDeparturePoint] = useState<string>('');
-    const [destinationPoint, setDestinationPoint] = useState<string>('');
+    // const [departurePoint, setDeparturePoint] = useState<string>('');
+    // const [destinationPoint, setDestinationPoint] = useState<string>('');
 
     const handleSearch = () => {
         const errors = [

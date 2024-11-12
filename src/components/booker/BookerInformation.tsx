@@ -16,20 +16,23 @@ type BookerFormData = {
 
 type FormErrors = {
   [key in keyof BookerFormData]?: string;
+  
 };
 
 type Props = {
   onSubmit: (data: BookerFormData) => void;
   onBack: () => void;
+  formData: BookerFormData;
+  setFormData: (data: BookerFormData) => void;
 };
 
-export default function BookerInformation({ onSubmit, onBack }: Props) {
-  const [formData, setFormData] = useState<BookerFormData>({
-    name: '',
-    phone: '',
-    email: '',
-    isPrimaryPassenger: false,
-  });
+export default function BookerInformation({ onSubmit, onBack, formData, setFormData }: Props) {
+  // const [formData, setFormData] = useState<BookerFormData>({
+  //   name: '',
+  //   phone: '',
+  //   email: '',
+  //   isPrimaryPassenger: false,
+  // });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [showCompanyWarning, setShowCompanyWarning] = useState(false);
@@ -81,10 +84,10 @@ export default function BookerInformation({ onSubmit, onBack }: Props) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
+    setFormData({
+      ...formData,
       [name]: type === 'checkbox' ? checked : value
-    }));
+    });
     if (errors[name as keyof FormErrors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }

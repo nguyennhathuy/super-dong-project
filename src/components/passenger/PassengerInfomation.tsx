@@ -4,7 +4,7 @@ import { TripSummary } from './TripSummary';
 import { validateEmail, validatePhone } from '../../utils';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-export type PassengerType = 
+type PassengerType = 
   | ''
   | 'Trẻ sơ sinh'
   | 'Trẻ em'
@@ -22,6 +22,12 @@ interface Passenger {
     email: string;
     specialNeeds: boolean;
     passengerType: PassengerType;
+    seatGo?: string;
+    seatReturn?: string;
+    ship?: string;
+    date?: string;
+    time?: string;
+    price?: number;
 }
 
 interface TripInfo {
@@ -49,20 +55,22 @@ const MOCK_TRIP_INFO: TripInfo = {
   shipCode: 'SuperDong II',
   departure: 'Rạch Giá',
   destination: 'Côn Đảo',
-  departureDate: '2024-03-20',
+  departureDate: '2024-11-14',
   departureTime: '08:00',
 };
 
 type Props = {
     onSubmit: () => void;
     onBack: () => void;
-    countPassenger: number
+    countPassenger: number;
+    passengers: Passenger[];
+    setPassengers: (data: Passenger[]) => void;
   };
 
-const PassengerInfomation = ({ onSubmit, onBack, countPassenger }: Props) => {
-  const [passengers, setPassengers] = React.useState<Passenger[]>(
-    () => Array.from({ length: countPassenger }, () => ({ ...INITIAL_PASSENGER }))
-  );
+const PassengerInfomation = ({ onSubmit, onBack, countPassenger, passengers, setPassengers }: Props) => {
+  // const [passengers, setPassengers] = React.useState<Passenger[]>(
+  //   () => Array.from({ length: countPassenger }, () => ({ ...INITIAL_PASSENGER }))
+  // );
   const [errors, setErrors] = React.useState<Record<string, string>>({});
 
   const handlePassengerChange = (index: number, field: keyof Passenger, value: any) => {
@@ -147,7 +155,6 @@ const PassengerInfomation = ({ onSubmit, onBack, countPassenger }: Props) => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      // Proceed to next step
       console.log('Form is valid, proceeding to next step');
       onSubmit()
     }

@@ -7,12 +7,12 @@ interface Journey {
   departureTime: string;
 }
 
+
 interface JourneyTabsProps {
   activeTab: 'go' | 'return';
   onTabChange: (tab: 'go' | 'return') => void;
   journeyGo: Journey;
   journeyReturn: Journey;
-  tripType: 'oneWay' | 'roundTrip'
 }
 
 const JourneyTabs: React.FC<JourneyTabsProps> = ({
@@ -20,7 +20,6 @@ const JourneyTabs: React.FC<JourneyTabsProps> = ({
   onTabChange,
   journeyGo,
   journeyReturn,
-  tripType
 }) => {
   return (
     <div className="mb-6">
@@ -39,9 +38,7 @@ const JourneyTabs: React.FC<JourneyTabsProps> = ({
           >
             Lượt đi
           </button>
-          {
-           (tripType && tripType === 'roundTrip') && 
-            <button
+          <button
             onClick={() => onTabChange('return')}
             className={`
               py-4 px-1 border-b-2 font-medium text-sm
@@ -54,7 +51,6 @@ const JourneyTabs: React.FC<JourneyTabsProps> = ({
           >
             Lượt về
           </button>
-          }
         </nav>
       </div>
 
