@@ -10,12 +10,19 @@ import RouteInfomation from './components/route/RouteInfomation';
 import { PassengerCounts } from './types';
 import { calculatePassengers } from './utils';
 import StaffRouteInfomation from './components/staffRoute/StaffRouteInfomation';
-import Navigation from './components/staffRoute/Navigation';
 import StaffPassengerInfomation from './components/staffPassenger/StaffPassengerInfomation';
 import StaffSeatInfomation from './components/staffSeat/StaffSeatInfomation';
 import StaffPaymentInfomation from './components/staffPayment/StaffPaymentInfomation';
 import Navbar from './components/thongKe/Navbar';
 import ThongKeInfomation from './components/thongKe/ThongKeInfomation';
+import DieuChinhThongTinHoaDon from './components/dieuChinhThongTinHoaDon/DieuChinhThongTinHoaDon';
+import DieuChinhThongTinVeInfoMation from './components/dieuChinhThongTinVe/DieuChinhThongTinVeInfoMation';
+import HoanVeDoiVeInfomation from './components/hoanVeDoiVe/HoanVeDoiVeInfomation';
+import ThongKeKenhInfomation from './components/thongKeKenh/ThongKeKenhInfomation';
+import ThongKePhongVeInfomation from './components/thongKePhongVe/ThongKePhongVeInfomation';
+import { UserMenu } from './components/userSetting/UserMenu';
+import { UserSettings } from './components/userSetting/UserSettings';
+import OrderHistory from './components/orderHistory/OrderHistory';
 
 const menuItems = [
   {
@@ -35,12 +42,12 @@ const menuItems = [
       {
         id: 2,
         name: 'Điều chỉnh thông tin vé',
-      
+
       },
       {
         id: 3,
         name: 'Hoàn vé & Đổi vé',
-      
+
       }
     ],
   },
@@ -48,6 +55,22 @@ const menuItems = [
     id: 'thong-ke',
     label: 'Thống kê',
     icon: <BarChart2 className="w-5 h-5" />,
+    subItems: [
+      {
+        id: 4,
+        name: 'Thống kê theo nhân viên',
+      },
+      {
+        id: 5,
+        name: 'Thống kê theo kênh phân phối',
+
+      },
+      {
+        id: 6,
+        name: 'Thống kê theo phòng vé',
+
+      }
+    ]
   },
 ];
 
@@ -125,16 +148,23 @@ function App() {
     () => Array.from({ length: calculatePassengers(totalPassenger) }, () => ({ ...INITIAL_PASSENGER }))
   );
   const [activeMenu, setActiveMenu] = useState('dat-ve');
-  const [showSubMenu, setShowSubMenu] = useState(false);
+  const [showSubMenu, setShowSubMenu] = useState<string | null>(null);
   const [currSubItem, setCurrSubItem] = useState<number | null>(null);
+  const [currUserMenu, setCurrUserMenu] = useState<'order' | 'history' | 'setting'>('order');
+
   const handleMenuClick = (menuId: string) => {
-    if (menuId !== 'nghiep-vu-ve') {
-      setShowSubMenu(false);
+    console.log({ menuId })
+    if (menuId === 'dat-ve') {
+      setShowSubMenu(null);
       setActiveMenu(menuId);
-      setCurrSubItem(null)
+      setCurrSubItem(null);
     }
     if (menuId === 'nghiep-vu-ve') {
-      setShowSubMenu(!showSubMenu);
+      setShowSubMenu('nghiep-vu-ve');
+    }
+    if (menuId === 'thong-ke') {
+      ``
+      setShowSubMenu('thong-ke');
     }
   };
   const handleSubmitSearchTrip = () => {
@@ -278,18 +308,28 @@ function App() {
         return <>404</>;
     }
   }
+  console.log({ isLogin })
   return (
     <div className="min-h-screen bg-gray-50">
       {
         (isLogin && isLogin === 'khachHang') && (
-          <header className="bg-blue-700 text-white py-4">
-            <div className="container mx-auto px-4">
-              <div className="flex items-center space-x-2">
-                <Ship className="h-8 w-8" />
-                <h1 className="text-2xl font-bold">Đặt Vé Tàu</h1>
+          <nav className="bg-white shadow-sm z-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between items-center h-16">
+                <div className="flex-1">
+                  <h1 className="text-xl font-semibold text-gray-800">
+                    Hệ Thống Đặt Vé
+                  </h1>
+                </div>
+                <UserMenu
+                  isLogin={isLogin}
+                  setIsLogin={setIsLogin}
+                  currUserMenu={currUserMenu}
+                  setCurrUserMenu={setCurrUserMenu}
+                />
               </div>
             </div>
-          </header>
+          </nav>
         )
       }
       {
@@ -303,10 +343,13 @@ function App() {
             setCurrSubItem={setCurrSubItem}
             setActiveMenu={setActiveMenu}
             setShowSubMenu={setShowSubMenu}
+            setIsLogin={setIsLogin}
+            currUserMenu={currUserMenu}
+            setCurrUserMenu={setCurrUserMenu}
+            isLogin={isLogin}
           />
         )
       }
-
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         {
@@ -315,8 +358,11 @@ function App() {
             onSubmit={setIsLogin}
           />
         }
+
+
+
         {
-          isLogin === 'khachHang' &&
+          (isLogin === 'khachHang' && currUserMenu === 'order') &&
           <>
             <ProgressBar
               currentStep={currentStep}
@@ -325,33 +371,60 @@ function App() {
           </>
         }
         {
+          (isLogin === 'khachHang' && currUserMenu === 'history') &&
+          <>
+            <OrderHistory />
+          </>
+        }
+        {
+          (isLogin === 'khachHang' && currUserMenu === 'setting') &&
+          <>
+            <UserSettings />
+          </>
+        }
+
+        {
           (isLogin === 'nhanVien' && activeMenu === 'dat-ve') &&
           <>
             {renderSwitchStaff(currentStepStaff)}
           </>
         }
+
         {
-          (isLogin === 'nhanVien' && activeMenu === 'thong-ke') &&
+          (isLogin === 'nhanVien' && activeMenu === 'thong-ke' && currSubItem === 4) &&
           <>
             <ThongKeInfomation />
           </>
         }
         {
+          (isLogin === 'nhanVien' && activeMenu === 'thong-ke' && currSubItem === 5) &&
+          <>
+            <ThongKeKenhInfomation />
+          </>
+        }
+        {
+          (isLogin === 'nhanVien' && activeMenu === 'thong-ke' && currSubItem === 6) &&
+          <>
+            <ThongKePhongVeInfomation />
+          </>
+        }
+
+        {
           (isLogin === 'nhanVien' && activeMenu === 'nghiep-vu-ve' && currSubItem === 1) &&
           <>
-            1
+            <DieuChinhThongTinHoaDon />
           </>
         }
         {
           (isLogin === 'nhanVien' && activeMenu === 'nghiep-vu-ve' && currSubItem === 2) &&
           <>
-            2
+            <DieuChinhThongTinVeInfoMation />
           </>
         }
         {
           (isLogin === 'nhanVien' && activeMenu === 'nghiep-vu-ve' && currSubItem === 3) &&
           <>
-            3
+            <HoanVeDoiVeInfomation />
           </>
         }
       </div>

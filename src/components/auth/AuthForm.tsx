@@ -53,12 +53,12 @@ export default function AuthForm({ onSubmit }: Props) {
       console.log('Form submitted:', formData);
     }
     if(
-      formData.email === "khachhang@gmail.com" && formData.password === "hello1"
+      formData.email === "khachhang@gmail.com" && formData.password === "123456"
     ){
       onSubmit('khachHang');
     }
     if(
-      formData.email === "nhanvien@gmail.com" && formData.password === "hello1"
+      formData.email === "nhanvien@gmail.com" && formData.password === "123456"
     ){
       onSubmit('nhanVien');
     }
