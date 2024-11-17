@@ -7,7 +7,7 @@ import PaymentInfomation from './components/payment/PaymentInfomation';
 import AuthForm from './components/auth/AuthForm';
 import { BarChart2, Settings, Ship, Ticket } from 'lucide-react';
 import RouteInfomation from './components/route/RouteInfomation';
-import { PassengerCounts } from './types';
+import { BookingStep, PassengerCounts } from './types';
 import { calculatePassengers } from './utils';
 import StaffRouteInfomation from './components/staffRoute/StaffRouteInfomation';
 import StaffPassengerInfomation from './components/staffPassenger/StaffPassengerInfomation';
@@ -124,7 +124,7 @@ const INITIAL_PASSENGER: Passenger = {
 };
 
 function App() {
-  const [currentStep, setCurrentStep] = useState<string>('route');
+  const [currentStep, setCurrentStep] = useState<BookingStep>('route');
   const [isLogin, setIsLogin] = useState<string | null>(null);
   const [totalPassenger, setTotalPassenger] = useState<PassengerCounts>({
     infant: 0,
@@ -151,20 +151,23 @@ function App() {
   const [showSubMenu, setShowSubMenu] = useState<string | null>(null);
   const [currSubItem, setCurrSubItem] = useState<number | null>(null);
   const [currUserMenu, setCurrUserMenu] = useState<'order' | 'history' | 'setting'>('order');
-
   const handleMenuClick = (menuId: string) => {
-    console.log({ menuId })
-    if (menuId === 'dat-ve') {
-      setShowSubMenu(null);
-      setActiveMenu(menuId);
-      setCurrSubItem(null);
-    }
-    if (menuId === 'nghiep-vu-ve') {
-      setShowSubMenu('nghiep-vu-ve');
-    }
-    if (menuId === 'thong-ke') {
-      ``
-      setShowSubMenu('thong-ke');
+    const toggleSubMenu = (id: string) => {
+      setShowSubMenu((prev) => (prev === id ? null : id));
+    };
+  
+    switch (menuId) {
+      case 'dat-ve':
+        setShowSubMenu(null);
+        setActiveMenu(menuId);
+        setCurrSubItem(null);
+        break;
+      case 'nghiep-vu-ve':
+      case 'thong-ke':
+        toggleSubMenu(menuId);
+        break;
+      default:
+        console.warn(`Unhandled menuId: ${menuId}`);
     }
   };
   const handleSubmitSearchTrip = () => {
@@ -308,7 +311,6 @@ function App() {
         return <>404</>;
     }
   }
-  console.log({ isLogin })
   return (
     <div className="min-h-screen bg-gray-50">
       {
@@ -352,81 +354,42 @@ function App() {
       }
 
       <div className="max-w-7xl mx-auto px-4 py-8">
+        {!isLogin && <AuthForm onSubmit={setIsLogin} />}
         {
-          !isLogin &&
-          <AuthForm
-            onSubmit={setIsLogin}
-          />
+          isLogin === 'khachHang' &&
+          (
+            <>
+              {
+                currUserMenu === 'order' &&
+                (
+                  <>
+                    <ProgressBar currentStep={currentStep} />
+                    {renderSwitch(currentStep)}
+                  </>
+                )
+              }
+              {currUserMenu === 'history' && <OrderHistory />}
+              {currUserMenu === 'setting' && <UserSettings />}
+            </>
+          )
         }
-
-
-
-        {
-          (isLogin === 'khachHang' && currUserMenu === 'order') &&
+        {isLogin === 'nhanVien' && (
           <>
-            <ProgressBar
-              currentStep={currentStep}
-            />
-            {renderSwitch(currentStep)}
+            {activeMenu === 'dat-ve' && renderSwitchStaff(currentStepStaff)}
+            {activeMenu === 'thong-ke' && currSubItem &&
+              {
+                4: <ThongKeInfomation />,
+                5: <ThongKeKenhInfomation />,
+                6: <ThongKePhongVeInfomation />,
+              }[currSubItem]}
+            {activeMenu === 'nghiep-vu-ve' && currSubItem &&
+              {
+                1: <DieuChinhThongTinHoaDon />,
+                2: <DieuChinhThongTinVeInfoMation />,
+                3: <HoanVeDoiVeInfomation />,
+              }[currSubItem]}
           </>
-        }
-        {
-          (isLogin === 'khachHang' && currUserMenu === 'history') &&
-          <>
-            <OrderHistory />
-          </>
-        }
-        {
-          (isLogin === 'khachHang' && currUserMenu === 'setting') &&
-          <>
-            <UserSettings />
-          </>
-        }
-
-        {
-          (isLogin === 'nhanVien' && activeMenu === 'dat-ve') &&
-          <>
-            {renderSwitchStaff(currentStepStaff)}
-          </>
-        }
-
-        {
-          (isLogin === 'nhanVien' && activeMenu === 'thong-ke' && currSubItem === 4) &&
-          <>
-            <ThongKeInfomation />
-          </>
-        }
-        {
-          (isLogin === 'nhanVien' && activeMenu === 'thong-ke' && currSubItem === 5) &&
-          <>
-            <ThongKeKenhInfomation />
-          </>
-        }
-        {
-          (isLogin === 'nhanVien' && activeMenu === 'thong-ke' && currSubItem === 6) &&
-          <>
-            <ThongKePhongVeInfomation />
-          </>
-        }
-
-        {
-          (isLogin === 'nhanVien' && activeMenu === 'nghiep-vu-ve' && currSubItem === 1) &&
-          <>
-            <DieuChinhThongTinHoaDon />
-          </>
-        }
-        {
-          (isLogin === 'nhanVien' && activeMenu === 'nghiep-vu-ve' && currSubItem === 2) &&
-          <>
-            <DieuChinhThongTinVeInfoMation />
-          </>
-        }
-        {
-          (isLogin === 'nhanVien' && activeMenu === 'nghiep-vu-ve' && currSubItem === 3) &&
-          <>
-            <HoanVeDoiVeInfomation />
-          </>
-        }
+        )}
       </div>
     </div>
   );

@@ -1,13 +1,12 @@
 import React from 'react';
 import { Check } from 'lucide-react';
-
-type Step = 'route' | 'booker' | 'passengers' | 'seats' | 'payment';
+import { BookingStep } from '../types';
 
 interface Props {
-  currentStep: Step;
+  currentStep: BookingStep;
 }
 
-const steps: { id: Step; label: string }[] = [
+const steps: { id: BookingStep; label: string }[] = [
   { id: 'route', label: 'Tuyến' },
   { id: 'booker', label: 'Người đặt vé' },
   { id: 'passengers', label: 'Hành khách' },
@@ -25,7 +24,6 @@ export default function ProgressBar({ currentStep }: Props) {
 
           return (
             <React.Fragment key={step.id}>
-              {/* Step Circle */}
               <div className="flex flex-col items-center flex-1">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center ${
@@ -50,7 +48,6 @@ export default function ProgressBar({ currentStep }: Props) {
                   {step.label}
                 </span>
               </div>
-              {/* Connector Line */}
               {index < steps.length - 1 && (
                 <div
                   className={`h-0.5 flex-1 ${

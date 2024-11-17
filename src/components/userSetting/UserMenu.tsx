@@ -59,7 +59,6 @@ export const UserMenu = ({ setIsLogin, currUserMenu, setCurrUserMenu, isLogin }:
     setCurrUserMenu('order')
     setIsOpen(false);
   }
-  console.log({ isLogin })
   return (
     <div ref={menuRef} className="relative">
       <button

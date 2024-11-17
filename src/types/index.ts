@@ -29,3 +29,4 @@ export interface PassengerCounts {
 }
 
 export type BookingStep = 'route' | 'booker' | 'passengers' | 'seats' | 'payment';
+

@@ -2,11 +2,16 @@ import React from 'react';
 import { ChevronDown } from 'lucide-react';
 import { UserMenu } from '../userSetting/UserMenu';
 
+interface subItemsType {
+  id: number,
+  name: string
+}
+
 interface MenuItem {
   id: string;
   label: string;
   icon: React.ReactNode;
-  subItems?: any;
+  subItems?: subItemsType[];
 }
 
 interface NavbarProps {
@@ -32,12 +37,13 @@ const Navbar: React.FC<NavbarProps> = ({
   setCurrSubItem,
   setActiveMenu,
   setShowSubMenu,
-  currSubItem,
   setIsLogin,
   currUserMenu,
   setCurrUserMenu,
-  isLogin
+  isLogin,
+  currSubItem
 }) => {
+  console.log('helooo')
   
   return (
     <nav className="bg-white shadow-lg">
@@ -72,20 +78,24 @@ const Navbar: React.FC<NavbarProps> = ({
                 {item.subItems && showSubMenu === item.id &&(
                   <div className="absolute z-10 left-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                     <div className="py-1">
-                      {item.subItems.map((subItem) => (
+                      {item.subItems.map((subItem: subItemsType) => (
                         <a
-                          key={subItem.id}
-                          href="#"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={
-                            () => {
-                              setActiveMenu(item.id)
-                              setCurrSubItem(subItem.id)
-                              setShowSubMenu(null)
-                            }
+                        key={subItem.id}
+                        href="#"
+                        className={`block px-4 py-2 text-sm ${
+                          currSubItem === subItem.id ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'
+                        }`}
+                        onClick={(e) => {
+                          if (currSubItem === subItem.id) {
+                            e.preventDefault();
+                          } else {
+                            setActiveMenu(item.id);
+                            setCurrSubItem(subItem.id);
+                            setShowSubMenu(null);
                           }
+                        }}
                         >
-                          {subItem.name}
+                        {subItem.name}
                         </a>
                       ))}
                     </div>
