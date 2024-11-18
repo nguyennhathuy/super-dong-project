@@ -1,25 +1,7 @@
 import React from 'react';
 import { calculateAge } from '../../utils';
+import { Passenger, PassengerType } from '../../types';
 
-type PassengerType = 
-  | ''
-  | 'Trẻ sơ sinh'
-  | 'Trẻ em'
-  | 'Người lớn'
-  | 'Người cao tuổi'
-  | 'Người khuyết tật';
-
-interface Passenger {
-  nationality: string;
-  idNumber: string;
-  fullName: string;
-  birthPlace: string;
-  birthDate: string;
-  phone: string;
-  email: string;
-  specialNeeds: boolean;
-  passengerType: PassengerType;
-}
 
 
 interface PassengerFormProps {
@@ -64,15 +46,15 @@ export function PassengerForm({
   React.useEffect(() => {
     let type: PassengerType = '';
     if (passenger.specialNeeds) {
-      type = 'Người khuyết tật';
+      type = 'disabled';
     } else if (age < 2) {
-      type = 'Trẻ sơ sinh';
+      type = 'infant';
     } else if (age >= 2 && age < 12) {
-      type = 'Trẻ em';
+      type = 'child';
     } else if (age >= 12 && age < 60) {
-      type = 'Người lớn';
+      type = 'adult';
     } else if (age >= 60) {
-      type = 'Người cao tuổi';
+      type = 'senior';
     }
     
     if (type !== passenger.passengerType) {

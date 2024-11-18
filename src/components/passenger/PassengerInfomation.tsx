@@ -3,32 +3,7 @@ import { PassengerForm } from './PassengerForm';
 import { TripSummary } from './TripSummary'; 
 import { validateEmail, validatePhone } from '../../utils';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-
-type PassengerType = 
-  | ''
-  | 'Trẻ sơ sinh'
-  | 'Trẻ em'
-  | 'Người lớn'
-  | 'Người cao tuổi'
-  | 'Người khuyết tật';
-
-interface Passenger {
-    nationality: string;
-    idNumber: string;
-    fullName: string;
-    birthPlace: string;
-    birthDate: string;
-    phone: string;
-    email: string;
-    specialNeeds: boolean;
-    passengerType: PassengerType;
-    seatGo?: string;
-    seatReturn?: string;
-    ship?: string;
-    date?: string;
-    time?: string;
-    price?: number;
-}
+import { Passenger } from '../../types';
 
 interface TripInfo {
     shipCode: string;
@@ -37,19 +12,6 @@ interface TripInfo {
     departureDate: string;
     departureTime: string;
 }
-
-
-const INITIAL_PASSENGER: Passenger = {
-  nationality: '',
-  idNumber: '',
-  fullName: '',
-  birthPlace: '',
-  birthDate: '',
-  phone: '',
-  email: '',
-  specialNeeds: false,
-  passengerType: '',
-};
 
 const MOCK_TRIP_INFO: TripInfo = {
   shipCode: 'SuperDong II',
@@ -67,10 +29,7 @@ type Props = {
     setPassengers: (data: Passenger[]) => void;
   };
 
-const PassengerInfomation = ({ onSubmit, onBack, countPassenger, passengers, setPassengers }: Props) => {
-  // const [passengers, setPassengers] = React.useState<Passenger[]>(
-  //   () => Array.from({ length: countPassenger }, () => ({ ...INITIAL_PASSENGER }))
-  // );
+const PassengerInfomation = ({ onSubmit, onBack, passengers, setPassengers }: Props) => {
   const [errors, setErrors] = React.useState<Record<string, string>>({});
 
   const handlePassengerChange = (index: number, field: keyof Passenger, value: any) => {
@@ -141,7 +100,7 @@ const PassengerInfomation = ({ onSubmit, onBack, countPassenger, passengers, set
 
     // Check if at least one adult passenger
     const hasAdult = passengers.some(p => 
-      p.passengerType === 'Người lớn' || p.passengerType === 'Người cao tuổi'
+      p.passengerType === 'adult' || p.passengerType === 'senior'
     );
 
     if (!hasAdult) {

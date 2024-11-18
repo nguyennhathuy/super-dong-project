@@ -2,28 +2,10 @@ import { useState } from 'react';
 import FileUpload from './FileUpload';
 import PassengerForm from './PassengerForm';
 import TripSummary from './TripSummary';
-
-type PassengerType = 
-  | ''
-  | 'Trẻ sơ sinh'
-  | 'Trẻ em'
-  | 'Người lớn'
-  | 'Người cao tuổi'
-  | 'Người khuyết tật';
-
-interface Passenger {
-  nationality: string;
-  idNumber: string;
-  fullName: string;
-  birthPlace: string;
-  birthDate: string;
-  phone: string;
-  email: string;
-  specialCondition: boolean;
-  passengerType: PassengerType;
-}
+import { Passenger } from '../../types';
 
 const initialPassenger: Passenger = {
+  id: '',
   nationality: 'Việt Nam',
   idNumber: '',
   fullName: '',
@@ -31,7 +13,7 @@ const initialPassenger: Passenger = {
   birthDate: '',
   phone: '',
   email: '',
-  specialCondition: false,
+  specialNeeds: false,
   passengerType: '',
 };
 
@@ -96,14 +78,14 @@ export default function StaffPassengerInfomation({ onSubmit, onBack }: Props) {
         const updated = { ...p, ...data };
         
         // Calculate passenger type based on age and special condition
-        if (updated.birthDate && updated.specialCondition) {
-          updated.passengerType = 'Người khuyết tật';
+        if (updated.birthDate && updated.specialNeeds) {
+          updated.passengerType = 'disabled';
         } else if (updated.birthDate) {
           const age = calculateAge(updated.birthDate);
-          if (age < 2) updated.passengerType = 'Trẻ sơ sinh';
-          else if (age >= 2 && age < 12) updated.passengerType = 'Trẻ em';
-          else if (age >= 61) updated.passengerType = 'Người cao tuổi';
-          else updated.passengerType = 'Người lớn';
+          if (age < 2) updated.passengerType = 'infant';
+          else if (age >= 2 && age < 12) updated.passengerType = 'child';
+          else if (age >= 61) updated.passengerType = 'senior';
+          else updated.passengerType = 'adult';
         }
 
         return updated;

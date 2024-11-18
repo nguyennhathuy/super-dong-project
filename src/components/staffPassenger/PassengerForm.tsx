@@ -1,24 +1,5 @@
+import { Passenger } from '../../types';
 import { vietnameseProvinces, countries } from '../const';
-
-type PassengerType = 
-  | ''
-  | 'Trẻ sơ sinh'
-  | 'Trẻ em'
-  | 'Người lớn'
-  | 'Người cao tuổi'
-  | 'Người khuyết tật';
-
-interface Passenger {
-  nationality: string;
-  idNumber: string;
-  fullName: string;
-  birthPlace: string;
-  birthDate: string;
-  phone: string;
-  email: string;
-  specialCondition: boolean;
-  passengerType: PassengerType;
-}
 
 interface PassengerFormProps {
   passenger: Passenger;
@@ -170,8 +151,8 @@ export default function PassengerForm({
         <div className="flex items-center mt-6">
           <input
             type="checkbox"
-            checked={passenger.specialCondition}
-            onChange={(e) => handleChange('specialCondition', e.target.checked)}
+            checked={passenger.specialNeeds}
+            onChange={(e) => handleChange('specialNeeds', e.target.checked)}
             className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
           />
           <label className="ml-2 block text-sm text-gray-700">

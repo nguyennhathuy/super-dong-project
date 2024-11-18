@@ -3,42 +3,8 @@ import SeatMap from './SeatMap';
 import PassengerList from './PassengerList'; 
 import JourneyTabs from './JourneyTabs'; 
 import { AlertTriangle, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Passenger } from '../../types';
 
-// type PassengerType = 'TRE_EM' | 'NGUOI_LON' | 'NGUOI_CAO_TUOI' | 'TRE_SO_SINH' | 'NGUOI_KHUYET_TAT';
-
-// interface Passenger {
-//   id: number;
-//   name: string;
-//   type: PassengerType;
-//   seatGo?: string;
-//   seatReturn?: string;
-// }
-
-type PassengerType = 
-  | ''
-  | 'Trẻ sơ sinh'
-  | 'Trẻ em'
-  | 'Người lớn'
-  | 'Người cao tuổi'
-  | 'Người khuyết tật';
-
-interface Passenger {
-  nationality: string;
-  idNumber: string;
-  fullName: string;
-  birthPlace: string;
-  birthDate: string;
-  phone: string;
-  email: string;
-  specialNeeds: boolean;
-  passengerType: PassengerType;
-  seatGo?: string;
-  seatReturn?: string;
-  ship?: string;
-  date?: string;
-  time?: string;
-  price?: number;
-}
 
 interface Journey {
   shipCode: string;
@@ -52,12 +18,6 @@ interface Seat {
   status: 'AVAILABLE' | 'BOOKED' | 'SELECTED' | 'DISABLED';
   price: number;
 }
-
-// const MOCK_PASSENGERS: Passenger[] = [
-//   { id: 1, name: 'Nguyễn Văn A', type: 'TRE_EM' },
-//   { id: 2, name: 'Lê B', type: 'NGUOI_CAO_TUOI' },
-//   { id: 3, name: 'Trần C', type: 'TRE_SO_SINH' },
-// ];
 
 const MOCK_JOURNEY_GO: Journey = {
   shipCode: 'SuperDong III',
@@ -98,11 +58,10 @@ function SeatInfomation({ onSubmit, onBack, tripType, passengers, setPassengers 
   // const [passengers, setPassengers] = useState<Passenger[]>(MOCK_PASSENGERS);
   const [seatsGo] = useState<Seat[]>(generateMockSeats());
   const [seatsReturn] = useState<Seat[]>(generateMockSeats());
-
   const handleSeatSelect = (seatId: string) => {
     const updatedPassengers = [...passengers];
     const passengerToUpdate = updatedPassengers.find(
-      (p) => p.passengerType !== 'Trẻ sơ sinh' && 
+      (p) => p.passengerType !== 'infant' && 
       (activeTab === 'go' ? !p.seatGo : !p.seatReturn)
     );
 
@@ -129,7 +88,7 @@ function SeatInfomation({ onSubmit, onBack, tripType, passengers, setPassengers 
 
   const getMissingSeatsWarning = () => {
     const passengersNeedingSeats = passengers.filter(
-      (p) => p.passengerType !== 'Trẻ sơ sinh'
+      (p) => p.passengerType !== 'infant'
     );
     const seatsSelected = getSelectedSeats().length;
     return passengersNeedingSeats.length > seatsSelected;

@@ -1,4 +1,7 @@
 export type TripType = 'oneWay' | 'roundTrip';
+export type BookingStep = 'route' | 'booker' | 'passengers' | 'seats' | 'payment';
+export type PassengerType = '' | 'infant' | 'child' | 'adult' | 'senior' | 'disabled';
+
 
 export type Route = {
   id: string;
@@ -6,19 +9,9 @@ export type Route = {
   to: string;
 };
 
-export type PassengerType = 'adult' | 'child' | 'senior';
 
 export type Passengers = {
   [key in PassengerType]: number;
-};
-
-export type Ferry = {
-  id: string;
-  name: string;
-  departureTime: string;
-  availableSeats: number;
-  totalSeats: number;
-  price: number;
 };
 
 export interface PassengerCounts {
@@ -28,5 +21,47 @@ export interface PassengerCounts {
   senior: number;
 }
 
-export type BookingStep = 'route' | 'booker' | 'passengers' | 'seats' | 'payment';
 
+export interface UserData {
+  personal: {
+    name: string;
+    phone: string;
+    email: string;
+  };
+  company?: {
+    buyer: string;
+    name: string;
+    taxId: string;
+    address: string;
+  };
+}
+
+export type BookerFormData = {
+  name: string;
+  phone: string;
+  email: string;
+  isPrimaryPassenger: boolean;
+  companyContact?: string;
+  companyName?: string;
+  taxCode?: string;
+  companyAddress?: string;
+};
+
+export interface Passenger {
+  id: string;
+  nationality: string;
+  idNumber: string;
+  fullName: string;
+  birthPlace: string;
+  birthDate: string;
+  phone: string;
+  email: string;
+  specialNeeds: boolean;
+  passengerType: PassengerType;
+  seatGo?: string;
+  seatReturn?: string;
+  ship?: string;
+  date?: string;
+  time?: string;
+  price?: number;
+}

@@ -1,47 +1,94 @@
-import React, { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Edit2, Save, X } from 'lucide-react';
+import { BookerFormData, UserData } from '../../types';
 
-interface UserData {
-  personal: {
-    name: string;
-    phone: string;
-    email: string;
-  };
-  company: {
-    buyer: string;
-    name: string;
-    taxId: string;
-    address: string;
-  };
+interface Props {
+  userData: UserData;
+  setUserData: (data: UserData) => void;
+  formData: BookerFormData;
+  setFormData: (data: BookerFormData) => void;
 }
 
-export const GeneralInfo = () => {
+export const GeneralInfo = ({ userData, setUserData, formData, setFormData }: Props) => {
   const [editingSection, setEditingSection] = useState<'personal' | 'company' | null>(null);
-  const [userData, setUserData] = useState<UserData>({
-    personal: {
-      name: 'Nguyễn Văn A',
-      phone: '0901234567',
-      email: 'nguyenvana@example.com',
-    },
-    company: {
-      buyer: 'Nguyễn Văn A',
-      name: 'Công ty TNHH ABC',
-      taxId: '0123456789',
-      address: '123 Đường ABC, Quận 1, TP.HCM',
-    },
-  });
-
+  const [personalName, setPersonalName] = useState<string>(userData.personal.name);
+  const [personalPhone, setPersonalPhone] = useState<string>(userData.personal.phone);
+  const [personalMail, setPersonalMail] = useState<string>(userData.personal.email);
+  const [nguoiMuaHang, setNguoiMuaHang] = useState<string>(userData.company ? userData.company.buyer : '');
+  const [companyName, setCompanyName] = useState<string>(userData.company ? userData.company.name : '');
+  const [companyTaxCode, setCompanyTaxCode] = useState<string>(userData.company ? userData.company.taxId : '');
+  const [companyAddress, setCompanyAddress] = useState<string>(userData.company ? userData.company.address : '');
   const handleEdit = (section: 'personal' | 'company') => {
+    if(editingSection === 'personal') handleSavePersonal()
+    if(editingSection === 'company') handleSaveCompany()
     setEditingSection(section);
   };
 
-  const handleSave = () => {
-    // Here you would typically save to backend
+  const handleSavePersonal = () => {
+    const newUserData = {
+      ...userData,
+      personal: {
+        ...userData.personal,
+        name: personalName,
+        phone: personalPhone,
+        email: personalMail,
+      },
+    }
+    const newFormData = {
+      ...formData,
+      name: personalName,
+      phone: personalPhone,
+      email: personalMail,
+    }
+    setFormData(newFormData)
+    setUserData(newUserData);
+    setEditingSection(null);
+  };
+
+  const handleSaveCompany = () => {
+    const newUserData = {
+      ...userData,
+      company: {
+        ...userData.company,
+        buyer: nguoiMuaHang,
+        name: companyName,
+        taxId: companyTaxCode,
+        address: companyAddress,
+      }
+    }
+    const newFormData = {
+      ...formData,
+      companyContact: nguoiMuaHang,
+      companyName: companyName,
+      taxCode: companyTaxCode,
+      companyAddress: companyAddress,
+    }
+    setFormData(newFormData)
+    setUserData(newUserData);
     setEditingSection(null);
   };
 
   const handleCancel = () => {
     setEditingSection(null);
+  };
+
+  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    if (editingSection === 'personal') {
+      // Xử lý thông tin cá nhân
+      if (name === 'name') setPersonalName(value);
+      if (name === 'phone') setPersonalPhone(value);
+      if (name === 'email') setPersonalMail(value);
+    }
+
+    if (editingSection === 'company') {
+      // Xử lý thông tin công ty
+      if (name === 'buyer') setNguoiMuaHang(value);
+      if (name === 'companyName') setCompanyName(value);
+      if (name === 'taxId') setCompanyTaxCode(value);
+      if (name === 'address') setCompanyAddress(value);
+    }
   };
 
   return (
@@ -61,7 +108,7 @@ export const GeneralInfo = () => {
           ) : (
             <div className="flex gap-2">
               <button
-                onClick={handleSave}
+                onClick={handleSavePersonal}
                 className="flex items-center gap-1 text-green-600 hover:text-green-700"
               >
                 <Save className="h-4 w-4" />
@@ -84,8 +131,10 @@ export const GeneralInfo = () => {
               Họ và tên
             </label>
             <input
+              name='name'
               type="text"
-              value={userData.personal.name}
+              value={personalName}
+              onChange={handleChangeInput}
               disabled={editingSection !== 'personal'}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50"
             />
@@ -95,8 +144,10 @@ export const GeneralInfo = () => {
               Số điện thoại
             </label>
             <input
+              name='phone'
               type="tel"
-              value={userData.personal.phone}
+              value={personalPhone}
+              onChange={handleChangeInput}
               disabled={editingSection !== 'personal'}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50"
             />
@@ -106,8 +157,10 @@ export const GeneralInfo = () => {
               Email
             </label>
             <input
+              name='email'
               type="email"
-              value={userData.personal.email}
+              value={personalMail}
+              onChange={handleChangeInput}
               disabled
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-50"
             />
@@ -115,7 +168,6 @@ export const GeneralInfo = () => {
         </div>
       </div>
 
-      {/* Company Information */}
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h3 className="text-lg font-medium text-gray-900">Thông tin công ty</h3>
@@ -130,7 +182,7 @@ export const GeneralInfo = () => {
           ) : (
             <div className="flex gap-2">
               <button
-                onClick={handleSave}
+                onClick={handleSaveCompany}
                 className="flex items-center gap-1 text-green-600 hover:text-green-700"
               >
                 <Save className="h-4 w-4" />
@@ -153,8 +205,10 @@ export const GeneralInfo = () => {
               Người mua hàng
             </label>
             <input
+              name='buyer'
               type="text"
-              value={userData.company.buyer}
+              value={nguoiMuaHang}
+              onChange={handleChangeInput}
               disabled={editingSection !== 'company'}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50"
             />
@@ -164,8 +218,10 @@ export const GeneralInfo = () => {
               Tên công ty
             </label>
             <input
+              name='companyName'
               type="text"
-              value={userData.company.name}
+              value={companyName}
+              onChange={handleChangeInput}
               disabled={editingSection !== 'company'}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50"
             />
@@ -175,8 +231,10 @@ export const GeneralInfo = () => {
               Mã số thuế
             </label>
             <input
+              name='taxId'
               type="text"
-              value={userData.company.taxId}
+              value={companyTaxCode}
+              onChange={handleChangeInput}
               disabled={editingSection !== 'company'}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50"
             />
@@ -186,8 +244,10 @@ export const GeneralInfo = () => {
               Địa chỉ công ty
             </label>
             <input
+              name='address'
               type="text"
-              value={userData.company.address}
+              value={companyAddress}
+              onChange={handleChangeInput}
               disabled={editingSection !== 'company'}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50"
             />

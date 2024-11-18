@@ -7,22 +7,14 @@ import { PromoCode } from './PromoCode';
 import { TotalAmount } from './TotalAmount'; 
 import { PaymentMethods, PaymentType } from './PaymentMethods'; 
 import { Timer } from './Timer';
+import { Passenger } from '../../types';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Service {
   name: string;
   unit: string;
   price: number;
   quantity: number;
-}
-
-interface Passenger {
-  id: number;
-  name: string;
-  idNumber: string;
-  ship: string;
-  date: string;
-  time: string;
-  price: number;
 }
 
 type Props = {
@@ -47,32 +39,53 @@ function PaymentInfomation({ onSubmit, onBack }: Props) {
 
   const passengers: Passenger[] = [
     {
-      id: 1,
-      name: 'Nguyễn A',
+      id: uuidv4(),
+      nationality: '',
       idNumber: '111111111111',
+      fullName: 'Nguyễn A Kha Nguyễn',
+      birthPlace: '',
+      birthDate: '20/11/1996',
+      phone: '0948003912',
+      email: 'nguyena@gmail.com',
+      specialNeeds: false,
+      passengerType: 'adult',
       ship: 'SuperDong II',
       date: '20/11/2024',
       time: '07:30',
       price: 169855,
     },
     {
-      id: 2,
-      name: 'Trần B',
-      idNumber: '222222222222',
+      id: uuidv4(),
+      nationality: '',
+      idNumber: '111111111111',
+      fullName: 'Nguyễn A Huy Nguyễn',
+      birthPlace: '',
+      birthDate: '20/11/1996',
+      phone: '0948003912',
+      email: 'nguyena@gmail.com',
+      specialNeeds: false,
+      passengerType: 'adult',
       ship: 'SuperDong II',
       date: '20/11/2024',
       time: '07:30',
       price: 169855,
     },
     {
-      id: 3,
-      name: 'Lê C',
-      idNumber: '333333333333',
+      id: uuidv4(),
+      nationality: '',
+      idNumber: '111111111111',
+      fullName: 'Nguyễn A Quý Nguyễn',
+      birthPlace: '',
+      birthDate: '20/11/1996',
+      phone: '0948003912',
+      email: 'nguyena@gmail.com',
+      specialNeeds: false,
+      passengerType: 'adult',
       ship: 'SuperDong II',
       date: '20/11/2024',
       time: '07:30',
       price: 169855,
-    },
+    }
   ];
 
   const customerInfo = {
@@ -122,7 +135,7 @@ function PaymentInfomation({ onSubmit, onBack }: Props) {
     }
   };
 
-  const totalTicketPrice = passengers.reduce((sum, p) => sum + p.price, 0);
+  const totalTicketPrice = passengers.reduce((sum, p) => sum + (p.price ? p.price : 0), 0);
   const totalServicePrice = services.reduce((sum, s) => sum + s.price * s.quantity, 0);
   const discount = promoApplied ? 50000 : 0;
   

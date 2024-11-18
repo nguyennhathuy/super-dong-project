@@ -1,30 +1,60 @@
 import { useState } from 'react';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { PassengerForm } from './PassengerForm';
+import { Passenger } from '../../types';
+import { v4 as uuidv4 } from 'uuid';
 
-interface Passenger {
-  id: string;
-  name: string;
-  idNumber: string;
-  birthDate: string;
-  phone: string;
-  email: string;
-  nationality: string;
-  birthPlace: string;
-}
 
 export const PassengerList = () => {
   const [passengers, setPassengers] = useState<Passenger[]>([
     {
-      id: '1',
-      name: 'Nguyễn Văn A',
-      idNumber: '079123456789',
-      birthDate: '1990-01-01',
-      phone: '0901234567',
-      email: 'nguyenvana@example.com',
-      nationality: 'Việt Nam',
-      birthPlace: 'TP.HCM',
+      id: uuidv4(),
+      nationality: '',
+      idNumber: '111111111111',
+      fullName: 'Nguyễn A Kha Nguyễn',
+      birthPlace: '',
+      birthDate: '20/11/1996',
+      phone: '0948003912',
+      email: 'nguyena@gmail.com',
+      specialNeeds: false,
+      passengerType: 'adult',
+      ship: 'SuperDong II',
+      date: '20/11/2024',
+      time: '07:30',
+      price: 169855,
     },
+    {
+      id: uuidv4(),
+      nationality: '',
+      idNumber: '111111111111',
+      fullName: 'Nguyễn A Huy Nguyễn',
+      birthPlace: '',
+      birthDate: '20/11/1996',
+      phone: '0948003912',
+      email: 'nguyena@gmail.com',
+      specialNeeds: false,
+      passengerType: 'adult',
+      ship: 'SuperDong II',
+      date: '20/11/2024',
+      time: '07:30',
+      price: 169855,
+    },
+    {
+      id: uuidv4(),
+      nationality: '',
+      idNumber: '111111111111',
+      fullName: 'Nguyễn A Quý Nguyễn',
+      birthPlace: '',
+      birthDate: '20/11/1996',
+      phone: '0948003912',
+      email: 'nguyena@gmail.com',
+      specialNeeds: false,
+      passengerType: 'adult',
+      ship: 'SuperDong II',
+      date: '20/11/2024',
+      time: '07:30',
+      price: 169855,
+    }
   ]);
   const [showForm, setShowForm] = useState(false);
   const [editingPassenger, setEditingPassenger] = useState<Passenger | null>(null);
@@ -105,12 +135,12 @@ export const PassengerList = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {passengers.map((passenger, index) => (
-              <tr key={passenger.id} className="hover:bg-gray-50">
+              <tr key={index} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {index + 1}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {passenger.name}
+                  {passenger.fullName}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {passenger.idNumber}

@@ -5,9 +5,9 @@ import PassengerInfomation from './components/passenger/PassengerInfomation';
 import SeatInfomation from './components/seat/SeatInfomation';
 import PaymentInfomation from './components/payment/PaymentInfomation';
 import AuthForm from './components/auth/AuthForm';
-import { BarChart2, Settings, Ship, Ticket } from 'lucide-react';
+import { BarChart2, Settings, Ticket } from 'lucide-react';
 import RouteInfomation from './components/route/RouteInfomation';
-import { BookingStep, PassengerCounts } from './types';
+import { BookerFormData, BookingStep, Passenger, PassengerCounts, UserData } from './types';
 import { calculatePassengers } from './utils';
 import StaffRouteInfomation from './components/staffRoute/StaffRouteInfomation';
 import StaffPassengerInfomation from './components/staffPassenger/StaffPassengerInfomation';
@@ -74,44 +74,8 @@ const menuItems = [
   },
 ];
 
-type PassengerType =
-  | ''
-  | 'Trẻ sơ sinh'
-  | 'Trẻ em'
-  | 'Người lớn'
-  | 'Người cao tuổi'
-  | 'Người khuyết tật';
-
-type BookerFormData = {
-  name: string;
-  phone: string;
-  email: string;
-  isPrimaryPassenger: boolean;
-  companyContact?: string;
-  companyName?: string;
-  taxCode?: string;
-  companyAddress?: string;
-};
-
-interface Passenger {
-  nationality: string;
-  idNumber: string;
-  fullName: string;
-  birthPlace: string;
-  birthDate: string;
-  phone: string;
-  email: string;
-  specialNeeds: boolean;
-  passengerType: PassengerType;
-  seatGo?: string;
-  seatReturn?: string;
-  ship?: string;
-  date?: string;
-  time?: string;
-  price?: number;
-}
-
 const INITIAL_PASSENGER: Passenger = {
+  id: '',
   nationality: '',
   idNumber: '',
   fullName: '',
@@ -123,6 +87,7 @@ const INITIAL_PASSENGER: Passenger = {
   passengerType: '',
 };
 
+
 function App() {
   const [currentStep, setCurrentStep] = useState<BookingStep>('route');
   const [isLogin, setIsLogin] = useState<string | null>(null);
@@ -132,7 +97,7 @@ function App() {
     adult: 1,
     senior: 0
   });
-  const [currentStepStaff, setCurrentStepStaff] = useState<string>('routeStaff')
+  const [currentStepStaff, setCurrentStepStaff] = useState<string>('routeStaff');
   const [tripType, setTripType] = useState<'oneWay' | 'roundTrip'>('oneWay');
   const [departureDate, setDepartureDate] = useState<Date | null>(null);
   const [returnDate, setReturnDate] = useState<Date | null>(null);
@@ -151,6 +116,14 @@ function App() {
   const [showSubMenu, setShowSubMenu] = useState<string | null>(null);
   const [currSubItem, setCurrSubItem] = useState<number | null>(null);
   const [currUserMenu, setCurrUserMenu] = useState<'order' | 'history' | 'setting'>('order');
+  const [userData, setUserData] = useState<UserData>({
+    personal: {
+      name: '',
+      phone: '',
+      email: ''
+    },
+    company: undefined,
+  });
   const handleMenuClick = (menuId: string) => {
     const toggleSubMenu = (id: string) => {
       setShowSubMenu((prev) => (prev === id ? null : id));
@@ -234,7 +207,11 @@ function App() {
   const handleBackPaymentStaff = () => {
     setCurrentStepStaff('seatsStaff');
   }
-
+  console.log(
+    {
+      formData
+    }
+  )
   const renderSwitch = (param: string) => {
     switch (param) {
       case 'route':
@@ -354,7 +331,14 @@ function App() {
       }
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {!isLogin && <AuthForm onSubmit={setIsLogin} />}
+        {
+          !isLogin && 
+          <AuthForm 
+            onSubmit={setIsLogin}
+            userData={userData}
+            setUserData={setUserData}
+          />
+        }
         {
           isLogin === 'khachHang' &&
           (
@@ -369,7 +353,15 @@ function App() {
                 )
               }
               {currUserMenu === 'history' && <OrderHistory />}
-              {currUserMenu === 'setting' && <UserSettings />}
+              {
+                currUserMenu === 'setting' && 
+                <UserSettings 
+                  userData={userData}
+                  setUserData={setUserData}
+                  formData={formData}
+                  setFormData={setFormData}
+                />
+              }
             </>
           )
         }

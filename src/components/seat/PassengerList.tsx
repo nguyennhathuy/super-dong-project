@@ -1,27 +1,6 @@
 import React from 'react';
 import { UserCircle } from 'lucide-react';
-
-type PassengerType = 
-  | ''
-  | 'Trẻ sơ sinh'
-  | 'Trẻ em'
-  | 'Người lớn'
-  | 'Người cao tuổi'
-  | 'Người khuyết tật';
-
-interface Passenger {
-  nationality: string;
-  idNumber: string;
-  fullName: string;
-  birthPlace: string;
-  birthDate: string;
-  phone: string;
-  email: string;
-  specialNeeds: boolean;
-  passengerType: PassengerType;
-  seatGo?: string;
-  seatReturn?: string;
-}
+import { Passenger } from '../../types';
 
 interface PassengerListProps {
   passengers: Passenger[];
@@ -29,18 +8,18 @@ interface PassengerListProps {
   tripType: 'oneWay' | 'roundTrip'
 }
 
-const PassengerList: React.FC<PassengerListProps> = ({ passengers, onSeatChange, tripType }) => {
+const PassengerList: React.FC<PassengerListProps> = ({ passengers, tripType }) => {
   const getPassengerTypeLabel = (type: Passenger['passengerType']) => {
     switch (type) {
-      case 'Trẻ em':
+      case 'child':
         return 'Trẻ em';
-      case 'Người lớn':
+      case 'adult':
         return 'Người lớn';
-      case 'Người cao tuổi':
+      case 'senior':
         return 'Người cao tuổi';
-      case 'Trẻ sơ sinh':
+      case 'infant':
         return 'Trẻ sơ sinh';
-      case 'Người khuyết tật':
+      case 'disabled':
         return 'Người khuyết tật';
       default:
         return '';
@@ -62,7 +41,7 @@ const PassengerList: React.FC<PassengerListProps> = ({ passengers, onSeatChange,
                 </span>
               </div>
             </div>
-            {passenger.passengerType !== 'Trẻ sơ sinh' && (
+            {passenger.passengerType !== 'infant' && (
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <div>
                   <label className="text-sm text-gray-600">Ghế đi</label>

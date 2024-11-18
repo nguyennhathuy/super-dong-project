@@ -1,31 +1,13 @@
 import { useMemo } from 'react';
-
-type PassengerType = 
-  | ''
-  | 'Trẻ sơ sinh'
-  | 'Trẻ em'
-  | 'Người lớn'
-  | 'Người cao tuổi'
-  | 'Người khuyết tật';
-
-interface Passenger {
-  nationality: string;
-  idNumber: string;
-  fullName: string;
-  birthPlace: string;
-  birthDate: string;
-  phone: string;
-  email: string;
-  specialCondition: boolean;
-  passengerType: PassengerType;
-}
+import { Passenger, PassengerType } from '../../types';
 
 const TICKET_PRICES = {
-  'Trẻ sơ sinh': 0,
-  'Trẻ em': 120000,
-  'Người lớn': 200000,
-  'Người cao tuổi': 150000,
-  'Người khuyết tật': 160000,
+  '': 0,
+  'infant': 0,
+  'child': 120000,
+  'adult': 200000,
+  'senior': 150000,
+  'disabled': 160000,
 } as const;
 
 interface TripSummaryProps {

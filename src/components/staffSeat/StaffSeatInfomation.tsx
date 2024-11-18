@@ -3,15 +3,8 @@ import SeatMap from './SeatMap';
 import PassengerList from './PassengerList';
 import JourneyTabs from './JourneyTabs';
 import { AlertTriangle } from 'lucide-react';
-type PassengerType = 'TRE_EM' | 'NGUOI_LON' | 'NGUOI_CAO_TUOI' | 'TRE_SO_SINH' | 'NGUOI_KHUYET_TAT';
-
-interface Passenger {
-  id: number;
-  name: string;
-  type: PassengerType;
-  seatGo?: string;
-  seatReturn?: string;
-}
+import { Passenger } from '../../types';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Journey {
   shipCode: string;
@@ -27,9 +20,54 @@ interface Seat {
 }
 
 const MOCK_PASSENGERS: Passenger[] = [
-  { id: 1, name: 'Nguyễn Văn A', type: 'TRE_EM' },
-  { id: 2, name: 'Lê B', type: 'NGUOI_CAO_TUOI' },
-  { id: 3, name: 'Trần C', type: 'TRE_SO_SINH' },
+  {
+    id: uuidv4(),
+    nationality: '',
+    idNumber: '111111111111',
+    fullName: 'Nguyễn A Kha Nguyễn',
+    birthPlace: '',
+    birthDate: '20/11/1996',
+    phone: '0948003912',
+    email: 'nguyena@gmail.com',
+    specialNeeds: false,
+    passengerType: 'adult',
+    ship: 'SuperDong II',
+    date: '20/11/2024',
+    time: '07:30',
+    price: 169855,
+  },
+  {
+    id: uuidv4(),
+    nationality: '',
+    idNumber: '111111111111',
+    fullName: 'Nguyễn A Huy Nguyễn',
+    birthPlace: '',
+    birthDate: '20/11/1996',
+    phone: '0948003912',
+    email: 'nguyena@gmail.com',
+    specialNeeds: false,
+    passengerType: 'adult',
+    ship: 'SuperDong II',
+    date: '20/11/2024',
+    time: '07:30',
+    price: 169855,
+  },
+  {
+    id: uuidv4(),
+    nationality: '',
+    idNumber: '111111111111',
+    fullName: 'Nguyễn A Quý Nguyễn',
+    birthPlace: '',
+    birthDate: '20/11/1996',
+    phone: '0948003912',
+    email: 'nguyena@gmail.com',
+    specialNeeds: false,
+    passengerType: 'adult',
+    ship: 'SuperDong II',
+    date: '20/11/2024',
+    time: '07:30',
+    price: 169855,
+  }
 ];
 
 const MOCK_JOURNEY_GO: Journey = {
@@ -72,7 +110,7 @@ function StaffSeatInfomation({ onSubmit, onBack }: Props) {
   const handleSeatSelect = (seatId: string) => {
     const updatedPassengers = [...passengers];
     const passengerToUpdate = updatedPassengers.find(
-      (p) => p.type !== 'TRE_SO_SINH' && 
+      (p) => p.passengerType !== 'infant' && 
       (activeTab === 'go' ? !p.seatGo : !p.seatReturn)
     );
 
@@ -99,7 +137,7 @@ function StaffSeatInfomation({ onSubmit, onBack }: Props) {
 
   const getMissingSeatsWarning = () => {
     const passengersNeedingSeats = passengers.filter(
-      (p) => p.type !== 'TRE_SO_SINH'
+      (p) => p.passengerType !== 'infant'
     );
     const seatsSelected = getSelectedSeats().length;
     return passengersNeedingSeats.length > seatsSelected;

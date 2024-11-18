@@ -1,31 +1,59 @@
 import { useState } from 'react';
 import SearchForm from './SearchForm'; 
 import SearchResults from './SearchResults'; 
-import EditForm from './EditForm'; 
+import EditForm from './EditForm';
+import { v4 as uuidv4 } from 'uuid';
+import { Passenger } from '../../types';
 
-const SAMPLE_PASSENGERS = [
+const SAMPLE_PASSENGERS: Passenger[]  = [
   {
-    id: '1',
-    name: 'Nguyễn Văn A',
-    idNumber: '001234567890',
-    birthDate: '1990-01-01',
-    phone: '0123456789',
-    email: 'nguyenvana@email.com',
-    nationality: 'Việt Nam',
-    birthPlace: 'Hà Nội',
-    specialStatus: false,
+    id: uuidv4(),
+    nationality: '',
+    idNumber: '111111111111',
+    fullName: 'Nguyễn A Kha Nguyễn',
+    birthPlace: '',
+    birthDate: '20/11/1996',
+    phone: '0948003912',
+    email: 'nguyena@gmail.com',
+    specialNeeds: false,
+    passengerType: 'adult',
+    ship: 'SuperDong II',
+    date: '20/11/2024',
+    time: '07:30',
+    price: 169855,
   },
   {
-    id: '2',
-    name: 'Trần Thị B',
-    idNumber: '001234567891',
-    birthDate: '1992-02-02',
-    phone: '0123456788',
-    email: 'tranthib@email.com',
-    nationality: 'Việt Nam',
-    birthPlace: 'TP. Hồ Chí Minh',
-    specialStatus: false,
+    id: uuidv4(),
+    nationality: '',
+    idNumber: '111111111111',
+    fullName: 'Nguyễn A Huy Nguyễn',
+    birthPlace: '',
+    birthDate: '20/11/1996',
+    phone: '0948003912',
+    email: 'nguyena@gmail.com',
+    specialNeeds: false,
+    passengerType: 'adult',
+    ship: 'SuperDong II',
+    date: '20/11/2024',
+    time: '07:30',
+    price: 169855,
   },
+  {
+    id: uuidv4(),
+    nationality: '',
+    idNumber: '111111111111',
+    fullName: 'Nguyễn A Quý Nguyễn',
+    birthPlace: '',
+    birthDate: '20/11/1996',
+    phone: '0948003912',
+    email: 'nguyena@gmail.com',
+    specialNeeds: false,
+    passengerType: 'adult',
+    ship: 'SuperDong II',
+    date: '20/11/2024',
+    time: '07:30',
+    price: 169855,
+  }
 ];
 
 function DieuChinhThongTinVeInfoMation() {

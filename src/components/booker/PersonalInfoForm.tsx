@@ -16,6 +16,7 @@ interface Props {
 }
 
 export default function PersonalInfoForm({ formData, errors, onChange }: Props) {
+  
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Thông tin người đặt vé</h2>

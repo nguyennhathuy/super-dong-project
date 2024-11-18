@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Facebook, Github, Mail } from 'lucide-react';
+import { UserData } from '../../types';
 
 type AuthMode = 'login' | 'register' | 'forgot';
 
 type Props = {
   onSubmit: (data: string) => void;
+  userData: UserData;
+  setUserData: (data: UserData) => void;
 }
 
-export default function AuthForm({ onSubmit }: Props) {
+export default function AuthForm({ onSubmit, userData, setUserData }: Props) {
   const [mode, setMode] = useState<AuthMode>('login');
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -55,11 +58,25 @@ export default function AuthForm({ onSubmit }: Props) {
     if(
       formData.email === "khachhang@gmail.com" && formData.password === "123456"
     ){
+      setUserData({
+        ...userData,
+        personal: {
+          ...userData.personal,
+          email: "khachhang@gmail.com"
+        }
+      })
       onSubmit('khachHang');
     }
     if(
       formData.email === "nhanvien@gmail.com" && formData.password === "123456"
     ){
+      setUserData({
+        ...userData,
+        personal: {
+          ...userData.personal,
+          email: "nhanvien@gmail.com"
+        }
+      })
       onSubmit('nhanVien');
     }
   };

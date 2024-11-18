@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import { Tabs } from './Tabs';
 import { GeneralInfo } from './GeneralInfo';
-import { PassengerList } from './PassengerList'; 
+import { PassengerList } from './PassengerList';
+import { BookerFormData, UserData } from '../../types';
 
-export const UserSettings = () => {
+interface Props {
+  userData: UserData;
+  setUserData: (data: UserData) => void;
+  formData: BookerFormData;
+  setFormData: (data: BookerFormData) => void;
+}
+
+export const UserSettings = ({ userData, setUserData, formData, setFormData }: Props) => {
   const [activeTab, setActiveTab] = useState('general');
 
   const tabs = [
@@ -16,7 +24,16 @@ export const UserSettings = () => {
       <div className="bg-white rounded-lg shadow-sm">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         <div className="p-6">
-          {activeTab === 'general' ? <GeneralInfo /> : <PassengerList />}
+          {
+            activeTab === 'general' ? 
+            <GeneralInfo 
+              userData={userData}
+              setUserData={setUserData}
+              formData={formData}
+              setFormData={setFormData}
+            /> : 
+            <PassengerList />
+          }
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PersonalInfoForm from './PersonalInfoForm';
 import CompanyInfoForm from './CompanyInfoForm';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { UserData } from '../../types';
 
 type BookerFormData = {
   name: string;
@@ -27,13 +28,6 @@ type Props = {
 };
 
 export default function BookerInformation({ onSubmit, onBack, formData, setFormData }: Props) {
-  // const [formData, setFormData] = useState<BookerFormData>({
-  //   name: '',
-  //   phone: '',
-  //   email: '',
-  //   isPrimaryPassenger: false,
-  // });
-
   const [errors, setErrors] = useState<FormErrors>({});
   const [showCompanyWarning, setShowCompanyWarning] = useState(false);
 

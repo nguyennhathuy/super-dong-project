@@ -1,19 +1,11 @@
-interface Passenger {
-  id: number;
-  name: string;
-  idNumber: string;
-  ship: string;
-  date: string;
-  time: string;
-  price: number;
-}
+import { Passenger } from "../../types";
 
 interface PassengerListProps {
   passengers: Passenger[];
 }
 
 export function PassengerList({ passengers }: PassengerListProps) {
-  const totalTicketPrice = passengers.reduce((sum, p) => sum + p.price, 0);
+  const totalTicketPrice = passengers.reduce((sum, p) => sum + (p.price ? p.price : 0), 0);
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
@@ -32,15 +24,15 @@ export function PassengerList({ passengers }: PassengerListProps) {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {passengers.map((passenger) => (
-              <tr key={passenger.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{passenger.id}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{passenger.name}</td>
+            {passengers.map((passenger, index) => (
+              <tr key={index}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{passenger.fullName}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{passenger.idNumber}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{passenger.ship}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{passenger.date}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{passenger.time}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{passenger.price.toLocaleString()}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{(passenger.price ? passenger.price : 0).toLocaleString()}</td>
               </tr>
             ))}
             <tr className="bg-gray-50">

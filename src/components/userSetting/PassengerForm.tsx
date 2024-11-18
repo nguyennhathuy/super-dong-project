@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-
-interface Passenger {
-  id: string;
-  name: string;
-  idNumber: string;
-  birthDate: string;
-  phone: string;
-  email: string;
-  nationality: string;
-  birthPlace: string;
-}
+import { Passenger } from '../../types';
+import { v4 as uuidv4 } from 'uuid';
 
 interface PassengerFormProps {
   passenger?: Passenger | null;
@@ -41,27 +32,33 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
   onSave,
   onCancel,
 }) => {
-  const [formData, setFormData] = useState<Omit<Passenger, 'id'>>({
-    name: '',
+  const [formData, setFormData] = useState<Passenger>({
+    id: '',
+    nationality: 'Việt Nam',
     idNumber: '',
+    fullName: '',
+    birthPlace: '',
     birthDate: '',
     phone: '',
     email: '',
-    nationality: 'Việt Nam',
-    birthPlace: '',
+    specialNeeds: false,
+    passengerType: 'adult'
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (passenger) {
       setFormData({
-        name: passenger.name,
+        id: uuidv4(),
+        nationality: passenger.nationality,
         idNumber: passenger.idNumber,
+        fullName: passenger.fullName,
+        birthPlace: passenger.birthPlace,
         birthDate: passenger.birthDate,
         phone: passenger.phone,
         email: passenger.email,
-        nationality: passenger.nationality,
-        birthPlace: passenger.birthPlace,
+        specialNeeds: passenger.specialNeeds,
+        passengerType: passenger.passengerType
       });
     }
   }, [passenger]);
@@ -69,7 +66,7 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.name.trim()) {
+    if (!formData.fullName.trim()) {
       newErrors.name = 'Vui lòng nhập tên hành khách';
     }
 
@@ -89,8 +86,8 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
     e.preventDefault();
     if (validateForm()) {
       onSave({
-        id: passenger?.id || '',
         ...formData,
+        id: passenger?.id || '',
       });
     }
   };
@@ -114,8 +111,8 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
             </label>
             <input
               type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              value={formData.fullName}
+              onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
               className={`mt-1 block w-full rounded-md shadow-sm ${
                 errors.name
                   ? 'border-red-300 focus:border-red-500 focus:ring-red-500'

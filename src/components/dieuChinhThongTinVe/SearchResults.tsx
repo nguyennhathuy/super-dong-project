@@ -1,12 +1,6 @@
-import React from 'react';
 import { FileEdit, Download, Mail } from 'lucide-react';
+import { Passenger } from '../../types';
 
-interface Passenger {
-  id: string;
-  name: string;
-  idNumber: string;
-  birthDate: string;
-}
 
 interface SearchResultsProps {
   passengers: Passenger[];
@@ -35,10 +29,10 @@ export default function SearchResults({ passengers, onEdit }: SearchResultsProps
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {passengers.map((passenger) => (
-              <tr key={passenger.id} className="hover:bg-gray-50">
+            {passengers.map((passenger, index) => (
+              <tr key={index} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {passenger.name}
+                  {passenger.fullName}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {passenger.idNumber}
