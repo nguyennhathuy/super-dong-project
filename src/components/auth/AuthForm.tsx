@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Facebook, Github, Mail } from 'lucide-react';
 import { UserData } from '../../types';
+import { accountList } from '../const';
+import { v4 as uuidv4 } from 'uuid';
 
 type AuthMode = 'login' | 'register' | 'forgot';
 
@@ -31,60 +33,81 @@ export default function AuthForm({ onSubmit, userData, setUserData }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newErrors: Record<string, string> = {};
-
-    if (!validateEmail(formData.email)) {
-      newErrors.email = 'Email không hợp lệ';
-    }
-
-    if (!validatePassword(formData.password)) {
-      newErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
-    }
-
+    const newErrors: Record<string, string>= {};
     if (mode === 'register') {
+      if (!validateEmail(formData.email)) {
+        newErrors.email = 'Email không hợp lệ';
+      }
       if (formData.password !== formData.confirmPassword) {
         newErrors.confirmPassword = 'Mật khẩu không khớp';
       }
       if (!formData.fullName) {
         newErrors.fullName = 'Vui lòng nhập họ tên';
       }
+      if (!validatePassword(formData.password)) {
+        newErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+      }
+
+      const account = accountList.find(
+        (acc) => acc.email === formData.email
+      );
+      if (account) {
+        newErrors.email = 'Tài khoản đã được đăng ký';
+      } else if (Object.keys(newErrors).length === 0) {
+        accountList.push(
+          {
+            id: uuidv4(),
+            email: formData.email,
+            password: formData.password,
+            fullName: formData.fullName,
+            role: 'khachHang'
+          }
+        )
+        setFormData({
+          email: '',
+          password: '',
+          confirmPassword: '',
+          fullName: '',
+        })
+        alert("Đăng ký thành công !")
+        setMode('login')
+      }
     }
 
+    if (mode === 'login') {
+      const account = accountList.find(
+        (acc) => acc.email === formData.email && acc.password === formData.password
+      );
+      if (
+        account
+      ) {
+        setFormData({
+          email: '',
+          password: '',
+          confirmPassword: '',
+          fullName: '',
+        });
+        setUserData({
+          ...userData,
+          personal: {
+            ...userData.personal,
+            email: account.email,
+            name: account.fullName
+          },
+          parentId: account.id
+        });
+        onSubmit(account.role);
+      } else {
+        newErrors.email = 'Tài khoản không hợp lệ';
+      }
+    }
     setErrors(newErrors);
-
-    if (Object.keys(newErrors).length === 0) {
-      console.log('Form submitted:', formData);
-    }
-    if(
-      formData.email === "khachhang@gmail.com" && formData.password === "123456"
-    ){
-      setUserData({
-        ...userData,
-        personal: {
-          ...userData.personal,
-          email: "khachhang@gmail.com"
-        }
-      })
-      onSubmit('khachHang');
-    }
-    if(
-      formData.email === "nhanvien@gmail.com" && formData.password === "123456"
-    ){
-      setUserData({
-        ...userData,
-        personal: {
-          ...userData.personal,
-          email: "nhanvien@gmail.com"
-        }
-      })
-      onSubmit('nhanVien');
-    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
+    if (errors?.[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
@@ -118,7 +141,7 @@ export default function AuthForm({ onSubmit, userData, setUserData }: Props) {
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Nhập họ và tên"
             />
-            {errors.fullName && (
+            {errors?.fullName && (
               <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
             )}
           </div>
@@ -136,7 +159,7 @@ export default function AuthForm({ onSubmit, userData, setUserData }: Props) {
             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="example@email.com"
           />
-          {errors.email && (
+          {errors?.email && (
             <p className="text-red-500 text-sm mt-1">{errors.email}</p>
           )}
         </div>
@@ -163,7 +186,7 @@ export default function AuthForm({ onSubmit, userData, setUserData }: Props) {
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
-            {errors.password && (
+            {errors?.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
             )}
           </div>
@@ -182,7 +205,7 @@ export default function AuthForm({ onSubmit, userData, setUserData }: Props) {
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="••••••••"
             />
-            {errors.confirmPassword && (
+            {!errors?.password && errors?.confirmPassword && (
               <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
             )}
           </div>
@@ -229,7 +252,18 @@ export default function AuthForm({ onSubmit, userData, setUserData }: Props) {
         {mode === 'login' ? (
           <>
             <button
-              onClick={() => setMode('forgot')}
+              onClick={
+                () => {
+                  setErrors({})
+                  setFormData({
+                    email: '',
+                    password: '',
+                    confirmPassword: '',
+                    fullName: '',
+                  })
+                  setMode('forgot')
+                }
+              }
               className="text-blue-600 hover:underline"
             >
               Quên mật khẩu?
@@ -237,7 +271,18 @@ export default function AuthForm({ onSubmit, userData, setUserData }: Props) {
             <div className="mt-2">
               Chưa có tài khoản?{' '}
               <button
-                onClick={() => setMode('register')}
+                onClick={
+                  () => {
+                    setErrors({})
+                    setFormData({
+                      email: '',
+                      password: '',
+                      confirmPassword: '',
+                      fullName: '',
+                    })
+                    setMode('register')
+                  }
+                }
                 className="text-blue-600 hover:underline font-medium"
               >
                 Đăng ký ngay
@@ -246,7 +291,18 @@ export default function AuthForm({ onSubmit, userData, setUserData }: Props) {
           </>
         ) : (
           <button
-            onClick={() => setMode('login')}
+            onClick={
+              () => {
+                setErrors({})
+                setFormData({
+                  email: '',
+                  password: '',
+                  confirmPassword: '',
+                  fullName: '',
+                })
+                setMode('login')
+              }
+            }
             className="text-blue-600 hover:underline font-medium"
           >
             Quay lại đăng nhập

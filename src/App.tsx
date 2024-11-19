@@ -123,6 +123,7 @@ function App() {
       email: ''
     },
     company: undefined,
+    parentId: ''
   });
   const handleMenuClick = (menuId: string) => {
     const toggleSubMenu = (id: string) => {
@@ -207,11 +208,7 @@ function App() {
   const handleBackPaymentStaff = () => {
     setCurrentStepStaff('seatsStaff');
   }
-  console.log(
-    {
-      formData
-    }
-  )
+  
   const renderSwitch = (param: string) => {
     switch (param) {
       case 'route':

@@ -1,70 +1,24 @@
 import { useState } from 'react';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { PassengerForm } from './PassengerForm';
-import { Passenger } from '../../types';
-import { v4 as uuidv4 } from 'uuid';
+import { PassengerFriend, UserData } from '../../types';
 
+interface Props {
+  userData: UserData;
+}
 
-export const PassengerList = () => {
-  const [passengers, setPassengers] = useState<Passenger[]>([
-    {
-      id: uuidv4(),
-      nationality: '',
-      idNumber: '111111111111',
-      fullName: 'Nguyễn A Kha Nguyễn',
-      birthPlace: '',
-      birthDate: '20/11/1996',
-      phone: '0948003912',
-      email: 'nguyena@gmail.com',
-      specialNeeds: false,
-      passengerType: 'adult',
-      ship: 'SuperDong II',
-      date: '20/11/2024',
-      time: '07:30',
-      price: 169855,
-    },
-    {
-      id: uuidv4(),
-      nationality: '',
-      idNumber: '111111111111',
-      fullName: 'Nguyễn A Huy Nguyễn',
-      birthPlace: '',
-      birthDate: '20/11/1996',
-      phone: '0948003912',
-      email: 'nguyena@gmail.com',
-      specialNeeds: false,
-      passengerType: 'adult',
-      ship: 'SuperDong II',
-      date: '20/11/2024',
-      time: '07:30',
-      price: 169855,
-    },
-    {
-      id: uuidv4(),
-      nationality: '',
-      idNumber: '111111111111',
-      fullName: 'Nguyễn A Quý Nguyễn',
-      birthPlace: '',
-      birthDate: '20/11/1996',
-      phone: '0948003912',
-      email: 'nguyena@gmail.com',
-      specialNeeds: false,
-      passengerType: 'adult',
-      ship: 'SuperDong II',
-      date: '20/11/2024',
-      time: '07:30',
-      price: 169855,
-    }
-  ]);
+export const PassengerList = ({ userData }: Props) => {
+  //nên dùng useEffect để fetch dữ liệu từ localStorage chỗ này
+  const [passengers, setPassengers] = useState<PassengerFriend[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [editingPassenger, setEditingPassenger] = useState<Passenger | null>(null);
+  const [editingPassenger, setEditingPassenger] = useState<PassengerFriend | null>(null);
 
   const handleAdd = () => {
     setEditingPassenger(null);
     setShowForm(true);
   };
 
-  const handleEdit = (passenger: Passenger) => {
+  const handleEdit = (passenger: PassengerFriend) => {
     setEditingPassenger(passenger);
     setShowForm(true);
   };
@@ -75,11 +29,11 @@ export const PassengerList = () => {
     }
   };
 
-  const handleSave = (passenger: Passenger) => {
+  const handleSave = (passenger: PassengerFriend) => {
     if (editingPassenger) {
       setPassengers(passengers.map(p => p.id === editingPassenger.id ? passenger : p));
     } else {
-      setPassengers([...passengers, { ...passenger, id: Date.now().toString() }]);
+      setPassengers([...passengers, { ...passenger }]);
     }
     setShowForm(false);
     setEditingPassenger(null);
@@ -184,6 +138,7 @@ export const PassengerList = () => {
 
       {showForm && (
         <PassengerForm
+          userData={userData}
           passenger={editingPassenger}
           onSave={handleSave}
           onCancel={() => {

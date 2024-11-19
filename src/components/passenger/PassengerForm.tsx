@@ -41,7 +41,7 @@ export function PassengerForm({
     onChange(index, field, value);
   };
 
-  const age = calculateAge(passenger.birthDate, departureDate);
+  const age = calculateAge(passenger.birthDate);
 
   React.useEffect(() => {
     let type: PassengerType = '';

@@ -1,6 +1,13 @@
 import { PassengerCounts } from "../types";
 
-export function calculateAge(birthDate: string, referenceDate: string): number {
+export function calculateAge(birthDate: string): number {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+
+    const referenceDate = `${year}-${month}-${day}`;
+
     const birth = new Date(birthDate);
     const reference = new Date(referenceDate);
     
@@ -32,3 +39,16 @@ export function calculateAge(birthDate: string, referenceDate: string): number {
   export function calculatePassengers(passengerCount: PassengerCounts): number {
     return Object.values(passengerCount).reduce((a, b) => a + b, 0);
   }
+
+  export function validateDateOfBirth(date: string): boolean {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+    const d1 = new Date(formattedDate);
+    const d2 = new Date(date);
+    
+    return d1.getTime() < d2.getTime()
+} 

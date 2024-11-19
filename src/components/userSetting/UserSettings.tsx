@@ -32,7 +32,9 @@ export const UserSettings = ({ userData, setUserData, formData, setFormData }: P
               formData={formData}
               setFormData={setFormData}
             /> : 
-            <PassengerList />
+            <PassengerList 
+              userData={userData}
+            />
           }
         </div>
       </div>

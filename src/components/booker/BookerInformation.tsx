@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PersonalInfoForm from './PersonalInfoForm';
 import CompanyInfoForm from './CompanyInfoForm';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { UserData } from '../../types';
 
 type BookerFormData = {
   name: string;

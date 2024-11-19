@@ -1,3 +1,5 @@
+import { Account, PassengerFriend } from "../../types";
+
 export const mockTrips = [
   {
     id: 1,
@@ -52,3 +54,22 @@ export const vietnameseProvinces = [
 export const countries = [
   'Mỹ', 'Úc', 'Canada', 'Anh', 'Pháp', 'Lào', 'Thái Lan'
 ].sort();
+
+export const accountList: Account[] = [
+  {
+    id: '1',
+    email: 'nhanvien@gmail.com',
+    password: '123456',
+    fullName: 'Cao Hữu Quý',
+    role: 'nhanVien'
+  },
+  {
+    id: '2',
+    email: 'khachhang@gmail.com',
+    password: '123456',
+    fullName: 'Nguyễn Nhật Huy',
+    role: 'khachHang'
+  }
+]
+
+export const passengerFriend: PassengerFriend[] = [];

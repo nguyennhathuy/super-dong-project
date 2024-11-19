@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { Passenger } from '../../types';
+import { PassengerFriend, PassengerType, UserData } from '../../types';
 import { v4 as uuidv4 } from 'uuid';
+import { calculateAge, validateDateOfBirth } from '../../utils';
 
 interface PassengerFormProps {
-  passenger?: Passenger | null;
-  onSave: (passenger: Passenger) => void;
+  passenger?: PassengerFriend | null;
+  onSave: (passenger: PassengerFriend) => void;
   onCancel: () => void;
+  userData: UserData;
 }
 
 const NATIONALITIES = [
@@ -31,8 +33,10 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
   passenger,
   onSave,
   onCancel,
+  userData
 }) => {
-  const [formData, setFormData] = useState<Passenger>({
+  const [formData, setFormData] = useState<PassengerFriend>({
+    parentId: '',
     id: '',
     nationality: 'Việt Nam',
     idNumber: '',
@@ -49,6 +53,7 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
   useEffect(() => {
     if (passenger) {
       setFormData({
+        parentId: '',
         id: uuidv4(),
         nationality: passenger.nationality,
         idNumber: passenger.idNumber,
@@ -67,7 +72,27 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
     const newErrors: Record<string, string> = {};
 
     if (!formData.fullName.trim()) {
-      newErrors.name = 'Vui lòng nhập tên hành khách';
+      newErrors.fullName = 'Vui lòng nhập tên hành khách';
+    }
+
+    if (!formData.idNumber.trim()) {
+      newErrors.idNumber = 'Vui lòng nhập CCCD/CMND';
+    }
+
+    if (!formData.birthDate.trim()) {
+      newErrors.birthDate = 'Vui lòng chọn ngày tháng năm sinh';
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Vui lòng nhập SĐT';
+    }
+
+    if (!formData.birthPlace.trim()) {
+      newErrors.birthPlace = 'Vui lòng chọn nơi sinh';
+    }
+
+    if(validateDateOfBirth(formData.birthDate)) {
+      newErrors.birthDate = 'Vui lòng chọn ngày tháng năm sinh hợp lệ';
     }
 
     if (formData.phone && !/^(\+84|0)\d{9,10}$/.test(formData.phone)) {
@@ -85,9 +110,22 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
+      const age = calculateAge(formData.birthDate)
+      let type: PassengerType = '';
+      if (age < 2) {
+        type = 'infant';
+      } else if (age >= 2 && age < 12) {
+        type = 'child';
+      } else if (age >= 12 && age < 60) {
+        type = 'adult';
+      } else if (age >= 60) {
+        type = 'senior';
+      }
       onSave({
         ...formData,
-        id: passenger?.id || '',
+        id: passenger?.id || uuidv4(),
+        parentId: userData.parentId,
+        passengerType: type
       });
     }
   };
@@ -112,15 +150,18 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
             <input
               type="text"
               value={formData.fullName}
-              onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-              className={`mt-1 block w-full rounded-md shadow-sm ${
-                errors.name
-                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
-              }`}
+              onChange={
+                (e) => {
+                  setFormData({ ...formData, fullName: e.target.value });
+                }
+              }
+              className={`mt-1 block w-full rounded-md shadow-sm ${errors.fullName
+                ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                }`}
             />
-            {errors.name && (
-              <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+            {errors.fullName && (
+              <p className="mt-1 text-sm text-red-600">{errors.fullName}</p>
             )}
           </div>
 
@@ -132,8 +173,14 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
               type="text"
               value={formData.idNumber}
               onChange={(e) => setFormData({ ...formData, idNumber: e.target.value })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              className={`mt-1 block w-full rounded-md shadow-sm ${errors.idNumber
+                ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                }`}
             />
+            {errors.idNumber && (
+              <p className="mt-1 text-sm text-red-600">{errors.idNumber}</p>
+            )}
           </div>
 
           <div>
@@ -144,8 +191,14 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
               type="date"
               value={formData.birthDate}
               onChange={(e) => setFormData({ ...formData, birthDate: e.target.value })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              className={`mt-1 block w-full rounded-md shadow-sm ${errors.birthDate
+                ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                }`}
             />
+            {errors.birthDate && (
+              <p className="mt-1 text-sm text-red-600">{errors.birthDate}</p>
+            )}
           </div>
 
           <div>
@@ -156,11 +209,10 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
               type="tel"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className={`mt-1 block w-full rounded-md shadow-sm ${
-                errors.phone
-                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
-              }`}
+              className={`mt-1 block w-full rounded-md shadow-sm ${errors.phone
+                ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                }`}
             />
             {errors.phone && (
               <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
@@ -175,11 +227,10 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className={`mt-1 block w-full rounded-md shadow-sm ${
-                errors.email
-                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
-              }`}
+              className={`mt-1 block w-full rounded-md shadow-sm ${errors.email
+                ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                }`}
             />
             {errors.email && (
               <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -225,8 +276,14 @@ export const PassengerForm: React.FC<PassengerFormProps> = ({
                 type="text"
                 value={formData.birthPlace}
                 onChange={(e) => setFormData({ ...formData, birthPlace: e.target.value })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className={`mt-1 block w-full rounded-md shadow-sm ${errors.birthPlace
+                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+                  : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                  }`}
               />
+            )}
+            {errors.birthPlace && (
+              <p className="mt-1 text-sm text-red-600">{errors.birthPlace}</p>
             )}
           </div>
 

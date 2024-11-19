@@ -34,6 +34,7 @@ export interface UserData {
     taxId: string;
     address: string;
   };
+  parentId: string
 }
 
 export type BookerFormData = {
@@ -64,4 +65,27 @@ export interface Passenger {
   date?: string;
   time?: string;
   price?: number;
+}
+
+export interface Account {
+  id: string,
+  email: string,
+  password: string,
+  fullName: string,
+  role: string,
+}
+
+
+export interface PassengerFriend {
+  parentId: string,
+  id: string;
+  nationality: string;
+  idNumber: string;
+  fullName: string;
+  birthPlace: string;
+  birthDate: string;
+  phone: string;
+  email: string;
+  specialNeeds: boolean;
+  passengerType: PassengerType;
 }
