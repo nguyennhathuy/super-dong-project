@@ -22,7 +22,7 @@ const SeatMap: React.FC<SeatMapProps> = ({ seats, onSeatSelect, selectedSeats })
       case 'BOOKED':
         return 'bg-gray-500';
       case 'SELECTED':
-        return 'bg-yellow-500';
+        return 'bg-primary';
       case 'DISABLED':
         return 'bg-red-500';
       default:
@@ -36,7 +36,7 @@ const SeatMap: React.FC<SeatMapProps> = ({ seats, onSeatSelect, selectedSeats })
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-bold">Sơ đồ ghế</h3>
           <div className="flex items-center space-x-2">
-            <Info className="w-5 h-5 text-blue-500" />
+            <Info className="w-5 h-5 text-tertiary" />
             <span className="text-sm text-gray-600">Nhấp vào ghế để chọn</span>
           </div>
         </div>
@@ -51,7 +51,7 @@ const SeatMap: React.FC<SeatMapProps> = ({ seats, onSeatSelect, selectedSeats })
                 ${getSeatColor(seat.status)}
                 w-12 h-12 rounded-lg flex items-center justify-center
                 text-white font-medium transition-colors duration-200
-                ${seat.type === 'VIP' ? 'border-2 border-yellow-300' : ''}
+                ${seat.type === 'VIP' ? 'border-2 border-primary' : ''}
               `}
             >
               {seat.id}
@@ -69,7 +69,7 @@ const SeatMap: React.FC<SeatMapProps> = ({ seats, onSeatSelect, selectedSeats })
             <span className="text-sm">Đã đặt</span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 bg-yellow-500 rounded"></div>
+            <div className="w-4 h-4 bg-primary rounded"></div>
             <span className="text-sm">Đang chọn</span>
           </div>
           <div className="flex items-center space-x-2">

@@ -153,7 +153,7 @@ const PassengerInfomation = ({ onSubmit, onBack, passengers, setPassengers }: Pr
         <div className="mt-8 flex justify-between">
           <button
             type="button"
-            className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+            className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-white bg-[#F7B727] hover:bg-primary-900"
             onClick={onBack}
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
@@ -163,7 +163,7 @@ const PassengerInfomation = ({ onSubmit, onBack, passengers, setPassengers }: Pr
           <button
             type="button"
             onClick={handleSubmit}
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tertiary hover:bg-tertiary-900"
           >
             Tiếp tục
             <ArrowRight className="w-5 h-5 ml-2" />

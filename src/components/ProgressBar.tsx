@@ -28,9 +28,9 @@ export default function ProgressBar({ currentStep }: Props) {
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     isCompleted
-                      ? 'bg-green-600'
+                      ? 'bg-primary'
                       : isCurrent
-                      ? 'bg-blue-600'
+                      ? 'bg-tertiary'
                       : 'bg-gray-200'
                   } ${isCompleted || isCurrent ? 'text-white' : 'text-gray-500'}`}
                 >
@@ -42,7 +42,7 @@ export default function ProgressBar({ currentStep }: Props) {
                 </div>
                 <span
                   className={`mt-2 text-sm font-medium ${
-                    isCurrent ? 'text-blue-600 font-medium' : 'text-gray-500'
+                    isCurrent ? 'text-tertiary font-medium' : isCompleted ? 'text-primary' : 'text-gray-500'
                   }`}
                 >
                   {step.label}
@@ -51,7 +51,7 @@ export default function ProgressBar({ currentStep }: Props) {
               {index < steps.length - 1 && (
                 <div
                   className={`h-0.5 flex-1 ${
-                    isCompleted ? 'bg-green-600' : 'bg-gray-200'
+                    isCompleted ? 'bg-primary' : 'bg-gray-200'
                   }`}
                 />
               )}

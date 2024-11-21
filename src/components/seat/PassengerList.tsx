@@ -33,7 +33,7 @@ const PassengerList: React.FC<PassengerListProps> = ({ passengers, tripType }) =
         {passengers.map((passenger, index) => (
           <div key={index} className="border rounded-lg p-4">
             <div className="flex items-center space-x-3 mb-2">
-              <UserCircle className="w-6 h-6 text-blue-500" />
+              <UserCircle className="w-6 h-6 text-tertiary" />
               <div>
                 <h4 className="font-medium">{passenger.fullName}</h4>
                 <span className="text-sm text-gray-600">

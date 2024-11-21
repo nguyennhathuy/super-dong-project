@@ -7,6 +7,8 @@ import DateSelector from './DateSelector';
 import TripResults from './TripResults';
 import { PassengerCounts } from '../../types';
 import { calculatePassengers } from '../../utils';
+import Promotions from './Promotions';
+import RouteHistory from './RouteHistory';
 
 
 type Props = {
@@ -27,11 +29,11 @@ type Props = {
 
 
 function RouteInfomation(
-    { 
-        onSubmit, 
-        totalPassenger, 
-        setTotalPassenger, 
-        tripType, 
+    {
+        onSubmit,
+        totalPassenger,
+        setTotalPassenger,
+        tripType,
         setTripType,
         departureDate,
         returnDate,
@@ -42,7 +44,7 @@ function RouteInfomation(
         setDeparturePoint,
         setDestinationPoint
     }
-    : Props) {
+        : Props) {
     // const [departureDate, setDepartureDate] = useState<Date | null>(null);
     // const [returnDate, setReturnDate] = useState<Date | null>(null);
     const [showResults, setShowResults] = useState<boolean>(false);
@@ -61,7 +63,7 @@ function RouteInfomation(
                 (departurePoint === destinationPoint)
             ) && 'Vui lòng chọn điểm đi và điểm đến khác nhau',
             (
-                (departureDate && returnDate) && 
+                (departureDate && returnDate) &&
                 (departureDate > returnDate)
             ) && 'Vui lòng chọn ngày đi sớm hơn hoặc bằng ngày về',
             calculatePassengers(totalPassenger) === 0 && 'Vui lòng chọn hành khách'
@@ -69,13 +71,14 @@ function RouteInfomation(
         setFormErrors(errors);
         setShowResults(errors.length === 0);
     };
-    
+
     return (
-        <div className="min-h-screen bg-gray-50">
+        <>
             {/* Main Content */}
-            <main className="container mx-auto px-4 py-8">
-                <div className="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
-                    <h2 className="text-2xl font-semibold mb-6">Tìm Chuyến Tàu</h2>
+            <main className="bg-white rounded-xl shadow-sm pr-6 pl-6">
+                
+                <div className="p-6 mx-auto">
+                    <h2 className="text-2xl font-semibold mb-6 mt-6">Tìm Chuyến Tàu</h2>
 
                     {/* Search Form */}
                     <div className="space-y-6">
@@ -126,7 +129,7 @@ function RouteInfomation(
 
                         <button
                             onClick={handleSearch}
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
+                            className="w-full bg-tertiary hover:bg-secondary text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center space-x-2"
                         >
                             <span>Tìm Tàu</span>
                             <ArrowRight className="h-5 w-5" />
@@ -137,10 +140,15 @@ function RouteInfomation(
                         <TripResults
                             tripType={tripType}
                             onSubmit={onSubmit}
-                        />}
+                        />
+                    }
+                    <h2 className="text-2xl font-semibold mb-6 mt-10">Thông tin khuyến mãi</h2>
+                    <Promotions />
+                    <h2 className="text-2xl font-semibold mb-6 mt-10">Tuyến đi gần nhất</h2>
+                    <RouteHistory />
                 </div>
             </main>
-        </div>
+        </>
     );
 }
 

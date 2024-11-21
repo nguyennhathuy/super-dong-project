@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatCurrency } from '../../utils';
+import { formatCurrency, getPassengerTypeLabel } from '../../utils';
 import { Passenger, PassengerType } from '../../types';
 
 const TICKET_PRICES = {
@@ -73,7 +73,7 @@ export function TripSummary({ tripInfo, passengers }: TripSummaryProps) {
         
         {Object.entries(passengerCounts).map(([type, count]) => (
           <div key={type} className="flex justify-between mb-2">
-            <span>{type} x {count}</span>
+            <span>{getPassengerTypeLabel(type as PassengerType)} x {count}</span>
             <span>{formatCurrency(TICKET_PRICES[type as PassengerType] * count)}</span>
           </div>
         ))}
@@ -81,7 +81,7 @@ export function TripSummary({ tripInfo, passengers }: TripSummaryProps) {
         <div className="border-t mt-4 pt-4">
           <div className="flex justify-between items-center">
             <span className="text-lg font-semibold">Tổng cộng</span>
-            <span className="text-2xl font-bold text-blue-600">
+            <span className="text-2xl font-bold text-tertiary">
               {formatCurrency(totalAmount)}
             </span>
           </div>

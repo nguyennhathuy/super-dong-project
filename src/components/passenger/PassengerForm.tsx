@@ -1,5 +1,5 @@
 import React from 'react';
-import { calculateAge } from '../../utils';
+import { calculateAge, getPassengerTypeLabel } from '../../utils';
 import { Passenger, PassengerType } from '../../types';
 
 
@@ -35,7 +35,6 @@ export function PassengerForm({
   index, 
   onChange, 
   errors,
-  departureDate,
 }: PassengerFormProps) {
   const handleChange = (field: keyof Passenger, value: any) => {
     onChange(index, field, value);
@@ -220,7 +219,7 @@ export function PassengerForm({
           </label>
           <input
             type="text"
-            value={passenger.passengerType}
+            value={getPassengerTypeLabel(passenger.passengerType)}
             readOnly
             className="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm"
           />

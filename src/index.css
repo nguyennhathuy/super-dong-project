@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.custom-border {
+    width: 0;
+    height: 0;
+    border-bottom: 90px solid transparent;
+    border-left: 90px solid white;
+}

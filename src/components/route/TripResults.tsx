@@ -66,7 +66,7 @@ const TripResults: React.FC<TripResultsProps> = ({ tripType, onSubmit }) => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     {trip.status === 'available' ? (
                       <button 
-                        className="text-blue-600 hover:text-blue-800 font-medium"
+                        className="text-tertiary hover:text-secondary font-medium"
                         onClick={onSubmit}
                       >
                         Chọn

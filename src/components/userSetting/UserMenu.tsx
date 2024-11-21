@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { History, Settings, LogOut, User2, Ship } from 'lucide-react';
+import { UserData } from '../../types';
 
 interface MenuItemProps {
   icon: React.ReactNode;
@@ -12,6 +13,7 @@ interface Props {
     setIsLogin: (data: string | null) => void;
     currUserMenu: 'order' | 'history' | 'setting'
     setCurrUserMenu: (data: 'order' | 'history' | 'setting') => void;
+    userData: UserData;
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ icon, text, onClick }) => (
@@ -24,7 +26,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ icon, text, onClick }) => (
   </button>
 );
 
-export const UserMenu = ({ setIsLogin, currUserMenu, setCurrUserMenu, isLogin }: Props) => {
+export const UserMenu = ({ setIsLogin, currUserMenu, setCurrUserMenu, isLogin, userData }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -60,14 +62,19 @@ export const UserMenu = ({ setIsLogin, currUserMenu, setCurrUserMenu, isLogin }:
     setIsOpen(false);
   }
   return (
-    <div ref={menuRef} className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
-        aria-label="Menu người dùng"
-      >
-        <User2 className="w-6 h-6 text-gray-700" />
-      </button>
+    
+    <div ref={menuRef} className="relative mr-9">
+      <div className='flex items-center	'>
+        <span className="mr-4 text-tertiary font-semibold">{userData?.personal?.name}</span>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200 bg-primary"
+          aria-label="Menu người dùng"
+        >
+          
+          <User2 className="w-6 h-6 text-tertiary" />
+        </button>
+      </div>
 
       {/* Overlay for mobile */}
       {isOpen && (

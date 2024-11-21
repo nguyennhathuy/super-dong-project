@@ -129,7 +129,7 @@ function App() {
     const toggleSubMenu = (id: string) => {
       setShowSubMenu((prev) => (prev === id ? null : id));
     };
-  
+
     switch (menuId) {
       case 'dat-ve':
         setShowSubMenu(null);
@@ -208,7 +208,7 @@ function App() {
   const handleBackPaymentStaff = () => {
     setCurrentStepStaff('seatsStaff');
   }
-  
+
   const renderSwitch = (param: string) => {
     switch (param) {
       case 'route':
@@ -289,21 +289,60 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       {
         (isLogin && isLogin === 'khachHang') && (
-          <nav className="bg-white shadow-sm z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between items-center h-16">
-                <div className="flex-1">
-                  <h1 className="text-xl font-semibold text-gray-800">
-                    Hệ Thống Đặt Vé
-                  </h1>
-                </div>
-                <UserMenu
-                  isLogin={isLogin}
-                  setIsLogin={setIsLogin}
-                  currUserMenu={currUserMenu}
-                  setCurrUserMenu={setCurrUserMenu}
-                />
+          // <nav className="bg-secondary shadow-sm z-50">
+          //   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          //     <div className="flex justify-between items-center h-16">
+          //       <div className="flex-1">
+          //         <h1 className="text-xl font-semibold text-tertiary">
+          //           Hệ Thống Đặt Vé
+          //         </h1>
+          //       </div>
+          //       <UserMenu
+          //         isLogin={isLogin}
+          //         setIsLogin={setIsLogin}
+          //         currUserMenu={currUserMenu}
+          //         setCurrUserMenu={setCurrUserMenu}
+          //       />
+          //     </div>
+          //   </div>
+          // </nav>
+          <nav className="bg-secondary flex">
+
+            <div className='flex'>
+              <img
+                src="public/images/white-wallpaper-1.jpg"
+                alt="Logo"
+                className="h-[90px] w-[15px]"
+              />
+              <img
+                src="/images/logo.png"
+                alt="Logo"
+                className="h-[90px] w-[90px]"
+              />
+              <div className='custom-border'>
+                
               </div>
+
+            </div>
+            <div className="h-[90px] w-[100%] flex justify-between items-center">
+              <div className="">
+                {/* Tiêu đề */}
+                <h1 className="text-2xl font-semibold text-tertiary">
+                  {
+                    currUserMenu === 'order' ? 'Hệ thống đặt vé' :
+                    currUserMenu === 'history' ? 'Tra cứu lịch sử vé' :
+                    currUserMenu === 'setting' ? 'Thiết lập thông tin' :
+                    ''
+                  }
+                </h1>
+              </div>
+              <UserMenu
+                isLogin={isLogin}
+                setIsLogin={setIsLogin}
+                currUserMenu={currUserMenu}
+                setCurrUserMenu={setCurrUserMenu}
+                userData={userData}
+              />
             </div>
           </nav>
         )
@@ -329,8 +368,8 @@ function App() {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         {
-          !isLogin && 
-          <AuthForm 
+          !isLogin &&
+          <AuthForm
             onSubmit={setIsLogin}
             userData={userData}
             setUserData={setUserData}
@@ -351,8 +390,8 @@ function App() {
               }
               {currUserMenu === 'history' && <OrderHistory />}
               {
-                currUserMenu === 'setting' && 
-                <UserSettings 
+                currUserMenu === 'setting' &&
+                <UserSettings
                   userData={userData}
                   setUserData={setUserData}
                   formData={formData}

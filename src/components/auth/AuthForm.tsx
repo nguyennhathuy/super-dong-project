@@ -213,7 +213,7 @@ export default function AuthForm({ onSubmit, userData, setUserData }: Props) {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200 font-medium"
+          className="w-full bg-tertiary text-white py-2 px-4 rounded-lg hover:bg-tertiary-900 transition duration-200 font-medium"
         >
           {mode === 'login' && 'Đăng Nhập'}
           {mode === 'register' && 'Đăng Ký'}
@@ -264,7 +264,7 @@ export default function AuthForm({ onSubmit, userData, setUserData }: Props) {
                   setMode('forgot')
                 }
               }
-              className="text-blue-600 hover:underline"
+              className="text-tertiary hover:underline"
             >
               Quên mật khẩu?
             </button>
@@ -283,7 +283,7 @@ export default function AuthForm({ onSubmit, userData, setUserData }: Props) {
                     setMode('register')
                   }
                 }
-                className="text-blue-600 hover:underline font-medium"
+                className="text-tertiary hover:underline font-medium"
               >
                 Đăng ký ngay
               </button>

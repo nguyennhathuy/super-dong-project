@@ -1,4 +1,4 @@
-import { PassengerCounts } from "../types";
+import { PassengerCounts, PassengerType } from "../types";
 
 export function calculateAge(birthDate: string): number {
     const today = new Date();
@@ -51,4 +51,23 @@ export function calculateAge(birthDate: string): number {
     const d2 = new Date(date);
     
     return d1.getTime() < d2.getTime()
-} 
+}
+
+export const getPassengerTypeLabel = (type: PassengerType) => {
+  switch (type) {
+    case '':
+      return '';
+    case 'disabled':
+      return 'Người khuyết tật';
+    case 'infant':
+      return 'Trẻ sơ sinh';
+    case 'child':
+      return 'Trẻ em';
+    case 'adult':
+      return 'Người lớn';
+    case 'senior':
+      return 'Người cao tuổi';
+    default:
+      return 'Không xác định'; // Trường hợp không nằm trong danh sách
+  }
+}

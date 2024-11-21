@@ -95,10 +95,9 @@ function SeatInfomation({ onSubmit, onBack, tripType, passengers, setPassengers 
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Đặt vé tàu</h1>
           <p className="mt-2 text-gray-600">
             Vui lòng chọn ghế cho hành khách
           </p>
@@ -110,13 +109,13 @@ function SeatInfomation({ onSubmit, onBack, tripType, passengers, setPassengers 
               <div className="flex space-x-4">
                 <button
                   onClick={() => handleAutoSelectSeats('nearest')}
-                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                  className="flex-1 bg-tertiary hover:bg-tertiary-900 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
                 >
                   Tự động chọn ghế gần nhau
                 </button>
                 <button
                   onClick={() => handleAutoSelectSeats('cheapest')}
-                  className="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                  className="flex-1 bg-secondary hover:bg-secondary-900 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
                 >
                   Tự động chọn ghế rẻ nhất
                 </button>
@@ -163,7 +162,7 @@ function SeatInfomation({ onSubmit, onBack, tripType, passengers, setPassengers 
         <div className="flex justify-between mt-8 space-x-4">
         <button
             type="button"
-            className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+            className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-white bg-[#F7B727] hover:bg-primary-900"
             onClick={onBack}
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
@@ -172,7 +171,7 @@ function SeatInfomation({ onSubmit, onBack, tripType, passengers, setPassengers 
           
           <button
             type="submit"
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tertiary hover:bg-tertiary-900"
             onClick={onSubmit}
           >
             Tiếp tục
